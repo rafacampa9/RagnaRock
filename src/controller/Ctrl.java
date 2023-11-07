@@ -24,7 +24,8 @@ public class Ctrl implements ActionListener{
     private InicioSala init;
     private Sala salaView;
 
-    public Ctrl(Buffer sala, Entrada entrada1, Entrada entrada2, Salida salida, InicioSala init, Sala salaView) {
+    public Ctrl(Buffer sala, Entrada entrada1, Entrada entrada2, 
+            Salida salida, InicioSala init, Sala salaView) {
         this.sala = sala;
         this.entrada1 = entrada1;
         this.entrada2 = entrada2;
@@ -55,32 +56,31 @@ public class Ctrl implements ActionListener{
         entrada2.start();
         salida.start();
     }
-    
-    public void actualizarAforo (int aforo){
-        salaView.txtAforo.setText(String.valueOf(aforo));
-    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        
         int dormirEntrada1, dormirEntrada2, dormirSalida;
         if (e.getSource() == init.btnSend){
             if (!init.txtEntrada1.getText().isEmpty() && init.txtEntrada1.getText()!= null
                     && !init.txtEntrada2.getText().isEmpty() && init.txtEntrada2.getText()!= null 
                     && !init.txtSalida.getText().isEmpty() && init.txtSalida.getText()!= null){
-            
-            dormirEntrada1 = Integer.parseInt(init.txtEntrada1.getText());
-            dormirEntrada2 = Integer.parseInt(init.txtEntrada2.getText());
-            dormirSalida = Integer.parseInt(init.txtSalida.getText());
-     
-            } else {
-                Random rand = new Random();
                 
+                try {
+                    dormirEntrada1 = (int) Math.round(Double.parseDouble(init.txtEntrada1.getText()));
+                    dormirEntrada2 = (int) Math.round(Double.parseDouble(init.txtEntrada2.getText()));
+                    dormirSalida = (int) Math.round(Double.parseDouble(init.txtSalida.getText()));
+                } catch (NumberFormatException ex) {
+           
+                    Random rand = new Random();
+                    dormirEntrada1 = rand.nextInt(9001) + 1000;
+                    dormirEntrada2 = rand.nextInt(9001) + 1000;
+                    dormirSalida = rand.nextInt(9001) + 1000;
+                }   
+            } else {
+                Random rand = new Random();               
                 dormirEntrada1 = rand.nextInt(9001) + 1000;
                 dormirEntrada2 = rand.nextInt(9001) + 1000;
-                dormirSalida = rand.nextInt(9001) + 1000;
-                
-                
+                dormirSalida = rand.nextInt(9001) + 1000;   
             }
             controlAforo(
                 dormirEntrada1,

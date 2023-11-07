@@ -18,9 +18,6 @@ import view.Sala;
  */
 public class RagnaRock {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         InicioSala init = new InicioSala();
         Sala sala = new Sala();

@@ -16,10 +16,10 @@ package model;
 public class Buffer {
     private int aforo;
 
+    public Buffer() {
+    }
 
-
-
-
+    
     public synchronized void put(int value)  {
         while (aforo == 10){
             try {
@@ -27,7 +27,6 @@ public class Buffer {
             } catch (InterruptedException e){
                 e.printStackTrace();
             }
-
         }
         notify();
         aforo += value;
@@ -46,7 +45,6 @@ public class Buffer {
         notify();
         aforo -= value;
         System.out.println("Aforo actual: " + aforo);
-
     }
 
     public synchronized int get(){

@@ -72,8 +72,9 @@ public class InicioSala extends javax.swing.JFrame {
         txtEntrada1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jPanel4.add(txtEntrada1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 20, 100, 20));
 
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel3.setText("Frecuencia 2ª entrada:");
-        jPanel4.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 60, 120, 20));
+        jPanel4.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 150, 20));
 
         txtEntrada2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jPanel4.add(txtEntrada2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 60, 100, 20));

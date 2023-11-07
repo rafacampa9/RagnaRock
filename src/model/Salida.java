@@ -33,7 +33,6 @@ public class Salida extends Thread{
             }
             
             salaView.txtAforo.setText(String.valueOf(sala.get()));
-            //sala.get();
         }
     }
 }
