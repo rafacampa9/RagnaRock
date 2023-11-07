@@ -30,24 +30,6 @@ public class RagnaRock {
         ctrl.iniciar();
         init.setVisible(true);
         
-        
-        
-        /*int dormir1, dormir2, dormir3;
-        InicioSala init = new InicioSala();
-        Scanner teclado = new Scanner(System.in);
-
-        System.out.println("Introduzca el valor del tiempo transcurrido en el que la gente quiere entrar en la entrada 1: ");
-        dormir1 = teclado.nextInt();
-
-        System.out.println("Introduzca el valor del tiempo transcurrido en el que la gente quiere entrar en la entrada 2: ");
-        dormir2 = teclado.nextInt();
-
-        System.out.println("Introduzca el valor del tiempo transcurrido en el que la gente quiere salir: ");
-        dormir3 = teclado.nextInt();
-
-        ctrl.controlAforo(dormir1, dormir2, dormir3);
-
-       */
     }
     
 }

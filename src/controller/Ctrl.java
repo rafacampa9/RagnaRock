@@ -6,6 +6,7 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 import model.Buffer;
 import model.Entrada;
 import model.Salida;
@@ -61,26 +62,36 @@ public class Ctrl implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        
+        int dormirEntrada1, dormirEntrada2, dormirSalida;
         if (e.getSource() == init.btnSend){
-            if (!init.txtEntrada1.getText().isEmpty() || init.txtEntrada1.getText() != null
-                || !init.txtEntrada2.getText().isEmpty() || init.txtEntrada2.getText() != null
-                || !init.txtSalida.getText().isEmpty() || init.txtEntrada2.getText() != null){
-                controlAforo (
-                        Integer.parseInt(init.txtEntrada1.getText()),
-                        Integer.parseInt(init.txtEntrada2.getText()),
-                        Integer.parseInt(init.txtSalida.getText())
-                );
+            if (!init.txtEntrada1.getText().isEmpty() && init.txtEntrada1.getText()!= null
+                    && !init.txtEntrada2.getText().isEmpty() && init.txtEntrada2.getText()!= null 
+                    && !init.txtSalida.getText().isEmpty() && init.txtSalida.getText()!= null){
+            
+            dormirEntrada1 = Integer.parseInt(init.txtEntrada1.getText());
+            dormirEntrada2 = Integer.parseInt(init.txtEntrada2.getText());
+            dormirSalida = Integer.parseInt(init.txtSalida.getText());
+     
+            } else {
+                Random rand = new Random();
                 
-
-                salaView.setTitle("RagnaRock");
-                salaView.setLocationRelativeTo(null);
-                salaView.setVisible(true);
-                init.setVisible(false);
-                   
-                    
+                dormirEntrada1 = rand.nextInt(9001) + 1000;
+                dormirEntrada2 = rand.nextInt(9001) + 1000;
+                dormirSalida = rand.nextInt(9001) + 1000;
                 
-
+                
             }
+            controlAforo(
+                dormirEntrada1,
+                dormirEntrada2,
+                dormirSalida
+            );
+            
+            salaView.setTitle("RagnaRock");
+            salaView.setLocationRelativeTo(null);
+            salaView.setVisible(true);
+            init.setVisible(false);
         }
     }
 }
