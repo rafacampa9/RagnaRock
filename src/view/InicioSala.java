@@ -59,7 +59,7 @@ public class InicioSala extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Calibri", 1, 48)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("RagnaRock");
+        jLabel1.setText("Control Aforo");
         jPanel2.add(jLabel1);
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.PAGE_START);
@@ -87,7 +87,7 @@ public class InicioSala extends javax.swing.JFrame {
         jPanel4.add(txtSalida, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 100, 100, 20));
 
         btnSend.setText("ENVIAR");
-        jPanel4.add(btnSend, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 140, -1, -1));
+        jPanel4.add(btnSend, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 140, -1, -1));
 
         jPanel1.add(jPanel4, java.awt.BorderLayout.CENTER);
 
@@ -101,7 +101,7 @@ public class InicioSala extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
         );
 
         pack();

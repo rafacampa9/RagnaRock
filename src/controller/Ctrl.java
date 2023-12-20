@@ -4,12 +4,17 @@
  */
 package controller;
 
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
+import javax.swing.JFrame;
+import javax.swing.Timer;
 import model.Buffer;
+import model.DateNow;
 import model.Entrada;
 import model.Salida;
+import view.DrawView;
 import view.InicioSala;
 import view.Sala;
 
@@ -18,49 +23,106 @@ import view.Sala;
  * @author rafacampa9
  */
 public class Ctrl implements ActionListener{
-    private Buffer sala;
+    private Buffer buffer;
     private Entrada entrada1, entrada2;
     private Salida salida;
     private InicioSala init;
-    private Sala salaView;
+    private Sala sala;
+    private DrawView paint;
+    private DateNow dateNow;
+    private int cont;
+    private Timer timer;
 
-    public Ctrl(Buffer sala, Entrada entrada1, Entrada entrada2, 
-            Salida salida, InicioSala init, Sala salaView) {
+    public Ctrl(Buffer buffer, Entrada entrada1, Entrada entrada2, 
+            Salida salida, InicioSala init, Sala sala, DrawView paint) {
         this.sala = sala;
         this.entrada1 = entrada1;
         this.entrada2 = entrada2;
         this.salida = salida;
         this.init = init;
-        this.salaView = salaView;
+        this.sala = sala;
+        this.paint = paint;
+        
         
         this.init.btnSend.addActionListener(this);
         this.init.txtEntrada1.addActionListener(this);
         this.init.txtEntrada2.addActionListener(this);
         this.init.txtSalida.addActionListener(this);
+        
+        this.sala.btnUpdate.addActionListener(this);
+        this.sala.btnChange.addActionListener(this);
+        timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                paint.repaint();
+            }
+        });
+        timer.setRepeats(true);
     }
     
     
     public void iniciar(){
-        init.setTitle("Inicio");
+        init.setTitle("Controller");
         init.setLocationRelativeTo(null);
     }
+    
+    public void instancia(int dormir_entrada1, int dormir_entrada2, int dormir_salida){
 
+        buffer = new Buffer();
+        entrada1 = new Entrada(dormir_entrada1, buffer, sala, paint);
+        entrada2 = new Entrada(dormir_entrada2, buffer, sala, paint);
+        salida = new Salida(dormir_salida, buffer, sala, paint);
+        dateNow = new DateNow(buffer, sala);
+    }
 
-    public void controlAforo(int dormir_entrada1, int dormir_entrada2, int dormir_salida){
-        sala = new Buffer();
-        entrada1 = new Entrada(dormir_entrada1, sala, salaView);
-        entrada2 = new Entrada(dormir_entrada2, sala, salaView);
-        salida = new Salida(dormir_salida, sala, salaView);
-
-        entrada1.start();
-        entrada2.start();
-        salida.start();
+    public void controlAforo(int dormir_entrada1, int dormir_entrada2, int dormir_salida, int cont, boolean wait){
+        
+        
+        
+            if (cont == 0){
+                instancia(dormir_entrada1, dormir_entrada2, dormir_salida);
+                entrada1.start();
+                entrada2.start();
+                salida.start();
+                dateNow.start();
+                cont = 1;
+                
+            } else {
+                entrada1.setWait(wait);
+                entrada2.setWait(wait);
+                salida.setWait(wait);
+                
+                entrada1.setDormir(dormir_entrada1);
+                entrada2.setDormir(dormir_entrada2);
+                salida.setDormir(dormir_salida);
+    
+            }
+            
+            
+        /*else{
+            if (action){
+                buffer.pausar();
+            } else {
+                buffer.reanudar();
+            }
+        }*/
+        
+        
+        
+        
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        
+        
+        
         int dormirEntrada1, dormirEntrada2, dormirSalida;
         if (e.getSource() == init.btnSend){
+            System.out.println("Este es el valor del contador: " + cont);
+            if (cont != 0){
+                controlAforo(0, 0, 0, cont, true);
+            }
             if (!init.txtEntrada1.getText().isEmpty() && init.txtEntrada1.getText()!= null
                     && !init.txtEntrada2.getText().isEmpty() && init.txtEntrada2.getText()!= null 
                     && !init.txtSalida.getText().isEmpty() && init.txtSalida.getText()!= null){
@@ -82,16 +144,59 @@ public class Ctrl implements ActionListener{
                 dormirEntrada2 = rand.nextInt(9001) + 1000;
                 dormirSalida = rand.nextInt(9001) + 1000;   
             }
+            
             controlAforo(
                 dormirEntrada1,
                 dormirEntrada2,
-                dormirSalida
+                dormirSalida,
+                cont,
+                false
             );
+
             
-            salaView.setTitle("RagnaRock");
-            salaView.setLocationRelativeTo(null);
-            salaView.setVisible(true);
-            init.setVisible(false);
+            if (cont == 0){
+                
+                sala.setTitle("RagnaRock");
+                sala.setLocationRelativeTo(null);
+                sala.setVisible(true);
+                sala.setSize(600, 300);
+                init.setVisible(false);
+                cont++;
+            } 
+            
+        } 
+        
+        if (e.getSource()==sala.btnUpdate){
+            init.setLocation(100,50);
+            init.setVisible(true);
+            init.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            
+        }
+        
+        if (e.getSource()==sala.btnChange){
+            paint.setTitle("Vista aforo");
+            paint.setLocation(700, 500);
+            paint.setSize(500, 400);
+            paint.setVisible(true);
+            paint.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            
+            startTimer();
+            
+            
+            
+            
+        }
+    }
+    
+    public void startTimer() {
+        if (timer != null && !timer.isRunning()) {
+            timer.start();
+        }
+    }
+
+    public void stopTimer() {
+        if (timer != null && timer.isRunning()) {
+            timer.stop();
         }
     }
 }

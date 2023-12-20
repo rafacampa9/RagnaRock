@@ -29,8 +29,17 @@ public class Sala extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        txtDateTime = new javax.swing.JTextField();
+        jPanel5 = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         txtAforo = new javax.swing.JTextField();
+        jPanel8 = new javax.swing.JPanel();
+        btnUpdate = new javax.swing.JButton();
+        btnChange = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -41,16 +50,59 @@ public class Sala extends javax.swing.JFrame {
         jLabel1.setText("RagnaRock");
         jPanel1.add(jLabel1, java.awt.BorderLayout.PAGE_START);
 
-        jPanel2.setLayout(new java.awt.GridLayout(1, 2));
+        jPanel2.setLayout(new java.awt.GridLayout(2, 1));
+
+        jPanel4.setLayout(new java.awt.GridLayout(2, 1));
+
+        jLabel3.setText("Fecha y hora actual: ");
+        jPanel6.add(jLabel3);
+
+        txtDateTime.setEditable(false);
+        txtDateTime.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        txtDateTime.setForeground(new java.awt.Color(0, 0, 0));
+        txtDateTime.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtDateTime.setMinimumSize(new java.awt.Dimension(150, 22));
+        txtDateTime.setPreferredSize(new java.awt.Dimension(156, 22));
+        txtDateTime.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDateTimeActionPerformed(evt);
+            }
+        });
+        jPanel6.add(txtDateTime);
+
+        jPanel4.add(jPanel6);
+
+        jPanel2.add(jPanel4);
+
+        jPanel5.setLayout(new java.awt.GridLayout(2, 1));
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel2.setText("AFORO:");
-        jPanel2.add(jLabel2);
+        jPanel7.add(jLabel2);
 
         txtAforo.setEditable(false);
         txtAforo.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         txtAforo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jPanel2.add(txtAforo);
+        txtAforo.setMinimumSize(new java.awt.Dimension(144, 40));
+        txtAforo.setPreferredSize(new java.awt.Dimension(65, 40));
+        txtAforo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtAforoActionPerformed(evt);
+            }
+        });
+        jPanel7.add(txtAforo);
+
+        jPanel5.add(jPanel7);
+
+        btnUpdate.setText("MODIFICAR");
+        jPanel8.add(btnUpdate);
+
+        btnChange.setText("CAMBIAR VISTA");
+        jPanel8.add(btnChange);
+
+        jPanel5.add(jPanel8);
+
+        jPanel2.add(jPanel5);
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.CENTER);
 
@@ -58,15 +110,23 @@ public class Sala extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtDateTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDateTimeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDateTimeActionPerformed
+
+    private void txtAforoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAforoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtAforoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -111,10 +171,19 @@ public class Sala extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JButton btnChange;
+    public javax.swing.JButton btnUpdate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     public javax.swing.JTextField txtAforo;
+    public volatile javax.swing.JTextField txtDateTime;
     // End of variables declaration//GEN-END:variables
 }

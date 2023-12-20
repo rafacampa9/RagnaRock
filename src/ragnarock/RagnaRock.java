@@ -7,6 +7,7 @@ package ragnarock;
 import controller.Ctrl;
 
 import model.Buffer;
+import view.DrawView;
 
 
 import view.InicioSala;
@@ -22,8 +23,9 @@ public class RagnaRock {
         InicioSala init = new InicioSala();
         Sala sala = new Sala();
         Buffer buff = new Buffer ();
+        DrawView paint = new DrawView();
         
-        Ctrl ctrl = new Ctrl(buff, null, null, null, init, sala);
+        Ctrl ctrl = new Ctrl(buff, null, null, null, init, sala, paint);
         ctrl.iniciar();
         init.setVisible(true);
         
