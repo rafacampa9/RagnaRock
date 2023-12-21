@@ -68,6 +68,7 @@ public class Ctrl implements ActionListener{
     public void iniciar(){
         init.setTitle("Controller");
         init.setLocationRelativeTo(null);
+        init.setResizable(false);
     }
     
     public void instancia(int dormir_entrada1, int dormir_entrada2, int dormir_salida){
@@ -159,6 +160,7 @@ public class Ctrl implements ActionListener{
         
         if (e.getSource()==sala.btnUpdate || e.getSource()==paint.btnUpdate){
             init.setLocation(20,50);
+            init.setResizable(false);
             init.setVisible(true);
             init.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
             
@@ -168,6 +170,7 @@ public class Ctrl implements ActionListener{
             paint.setTitle("Vista aforo");
             paint.setLocationRelativeTo(null);
             paint.setSize(500, 400);
+            paint.setResizable(false);
             paint.setVisible(true);
             sala.setVisible(false);
             
@@ -198,6 +201,7 @@ public class Ctrl implements ActionListener{
     public void initSalaPrincipal(){
         sala.setTitle("RagnaRock");
             sala.setLocationRelativeTo(null);
+            sala.setResizable(false);
             sala.setVisible(true);
             sala.setSize(600, 300);
     }
