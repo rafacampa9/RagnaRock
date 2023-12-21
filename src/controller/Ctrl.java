@@ -51,6 +51,10 @@ public class Ctrl implements ActionListener{
         
         this.sala.btnUpdate.addActionListener(this);
         this.sala.btnChange.addActionListener(this);
+        
+        this.paint.btnChange.addActionListener(this);
+        this.paint.btnUpdate.addActionListener(this);
+        
         timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -72,13 +76,14 @@ public class Ctrl implements ActionListener{
         entrada1 = new Entrada(dormir_entrada1, buffer, sala, paint);
         entrada2 = new Entrada(dormir_entrada2, buffer, sala, paint);
         salida = new Salida(dormir_salida, buffer, sala, paint);
-        dateNow = new DateNow(buffer, sala);
+        dateNow = new DateNow(buffer, sala, paint);
     }
 
+    
+    
+    
     public void controlAforo(int dormir_entrada1, int dormir_entrada2, int dormir_salida, int cont, boolean wait){
-        
-        
-        
+
             if (cont == 0){
                 instancia(dormir_entrada1, dormir_entrada2, dormir_salida);
                 entrada1.start();
@@ -97,17 +102,7 @@ public class Ctrl implements ActionListener{
                 salida.setDormir(dormir_salida);
     
             }
-            
-            
-        /*else{
-            if (action){
-                buffer.pausar();
-            } else {
-                buffer.reanudar();
-            }
-        }*/
-        
-        
+    
         
         
     }
@@ -119,7 +114,6 @@ public class Ctrl implements ActionListener{
         
         int dormirEntrada1, dormirEntrada2, dormirSalida;
         if (e.getSource() == init.btnSend){
-            System.out.println("Este es el valor del contador: " + cont);
             if (cont != 0){
                 controlAforo(0, 0, 0, cont, true);
             }
@@ -156,18 +150,15 @@ public class Ctrl implements ActionListener{
             
             if (cont == 0){
                 
-                sala.setTitle("RagnaRock");
-                sala.setLocationRelativeTo(null);
-                sala.setVisible(true);
-                sala.setSize(600, 300);
+                initSalaPrincipal();
                 init.setVisible(false);
                 cont++;
             } 
             
         } 
         
-        if (e.getSource()==sala.btnUpdate){
-            init.setLocation(100,50);
+        if (e.getSource()==sala.btnUpdate || e.getSource()==paint.btnUpdate){
+            init.setLocation(20,50);
             init.setVisible(true);
             init.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
             
@@ -175,17 +166,21 @@ public class Ctrl implements ActionListener{
         
         if (e.getSource()==sala.btnChange){
             paint.setTitle("Vista aforo");
-            paint.setLocation(700, 500);
+            paint.setLocationRelativeTo(null);
             paint.setSize(500, 400);
             paint.setVisible(true);
-            paint.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            sala.setVisible(false);
             
             startTimer();
-            
-            
-            
-            
+  
         }
+        
+        if (e.getSource()==paint.btnChange){
+            stopTimer();
+            initSalaPrincipal();
+            paint.setVisible(false);
+        }
+        
     }
     
     public void startTimer() {
@@ -198,6 +193,13 @@ public class Ctrl implements ActionListener{
         if (timer != null && timer.isRunning()) {
             timer.stop();
         }
+    }
+    
+    public void initSalaPrincipal(){
+        sala.setTitle("RagnaRock");
+            sala.setLocationRelativeTo(null);
+            sala.setVisible(true);
+            sala.setSize(600, 300);
     }
 }
 

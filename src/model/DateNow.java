@@ -4,6 +4,7 @@
  */
 package model;
 
+import view.DrawView;
 import view.Sala;
 
 
@@ -16,19 +17,21 @@ import view.Sala;
 public class DateNow extends Thread{
     private Buffer buffer;
     private Sala sala;
+    private DrawView paint;
     
     
-    public DateNow (Buffer buffer, Sala sala){
+    public DateNow (Buffer buffer, Sala sala, DrawView paint){
       this.buffer = buffer;
       this.sala = sala;
+      this.paint = paint;
         
     }
     
     @Override
     public void run(){
-        while(true){
-            
+        while(true){           
             sala.txtDateTime.setText(buffer.getDateNow());
+            paint.txtDateTime.setText(buffer.getDateNow());
             try
             {
                 sleep(1000);

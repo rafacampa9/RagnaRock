@@ -26,7 +26,7 @@ public class DrawView extends javax.swing.JFrame {
     
     public DrawView (){
         initComponents();
-        this.jPanel3.setLayout(new FlowLayout());
+        
         
     }
     public DrawView(int aforo) {
@@ -65,6 +65,10 @@ public class DrawView extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
+        btnUpdate = new javax.swing.JButton();
+        btnChange = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        txtDateTime = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -78,7 +82,7 @@ public class DrawView extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE))
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -87,6 +91,23 @@ public class DrawView extends javax.swing.JFrame {
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
                 .addContainerGap())
         );
+
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        btnUpdate.setText("MODIFICAR");
+        jPanel3.add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 210, -1, -1));
+
+        btnChange.setText("CAMBIAR VISTA");
+        jPanel3.add(btnChange, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 210, -1, -1));
+
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Fecha y hora actual:");
+        jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 0, -1, -1));
+
+        txtDateTime.setEditable(false);
+        txtDateTime.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        txtDateTime.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jPanel3.add(txtDateTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 0, 250, 20));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -100,7 +121,8 @@ public class DrawView extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -165,8 +187,11 @@ public class DrawView extends javax.swing.JFrame {
         g.drawRect(100, 170,300, 120);
         if (aforo < 6){
             for (int i = 0; i < aforo; i++){
-                
-                g.drawOval(100 + 60*i, 230, 60,60);
+                if (i%2==0)
+                    g.setColor(Color.red);
+                else
+                    g.setColor(Color.black);
+                g.fillOval(100 + 60*i, 230, 60,60);
             }
         } else {
             int row=0, col=0;
@@ -178,16 +203,33 @@ public class DrawView extends javax.swing.JFrame {
                 int x = 100 + 60*col;
                 int y = 230 - 60*row;
                 
-                g.drawOval(x, y, 60, 60);
+                
+                if (row == 1){
+                    if (col%2==0)
+                        g.setColor(Color.black);
+                    else
+                        g.setColor(Color.red);
+                } else {
+                    if (col%2==0)
+                        g.setColor(Color.red);
+                    else
+                        g.setColor(Color.black);
+                }
+
+                g.fillOval(x, y, 60, 60);
                 col++;
             }
         }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JButton btnChange;
+    public javax.swing.JButton btnUpdate;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     public javax.swing.JPanel jPanel3;
+    public javax.swing.JTextField txtDateTime;
     // End of variables declaration//GEN-END:variables
 }
