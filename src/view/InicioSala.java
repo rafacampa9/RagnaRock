@@ -70,7 +70,7 @@ public class InicioSala extends javax.swing.JFrame {
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel2.setText("Frecuencia 1ª entrada:");
-        jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, -1, 20));
+        jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, 150, 20));
 
         txtEntrada1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jPanel4.add(txtEntrada1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 20, 100, 20));
@@ -84,7 +84,7 @@ public class InicioSala extends javax.swing.JFrame {
 
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel4.setText("Frecuencia 1ª salida:");
-        jPanel4.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 100, 120, 20));
+        jPanel4.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, 150, 20));
 
         txtSalida.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jPanel4.add(txtSalida, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 100, 100, 20));
@@ -94,7 +94,7 @@ public class InicioSala extends javax.swing.JFrame {
 
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel5.setText("Frecuencia 2ª salida:");
-        jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(57, 140, 130, -1));
+        jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, 150, 20));
 
         txtSalida2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jPanel4.add(txtSalida2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 140, 100, -1));
