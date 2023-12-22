@@ -19,10 +19,32 @@ import java.util.Date;
 public class Buffer {
     private int aforo;
     private String dateNow;
+    private boolean entradaBloqueada = false;
+    private boolean salidaBloqueada = false;
 
     public Buffer() {
     }
 
+
+    /**
+     * 
+     * @return
+     * 
+     * ambos métodos que aparecen a continuación
+     * notificarán a la entrada y salida auxiliar
+     * para que sepan si deben permanecer abiertas 
+     * o por el contrario, bloquearse
+     */
+    public synchronized boolean isEntradaBloqueada(){
+        return entradaBloqueada;
+    }
+    
+    
+    public synchronized boolean isSalidaBloqueada(){
+        return salidaBloqueada;
+    }
+    
+    
     
     /**
      * 
@@ -39,7 +61,7 @@ public class Buffer {
      */
     public synchronized void put(int value)  {
         while (aforo == 25){
-            try {
+            try{
                 wait();
             } catch (InterruptedException e){
                 e.printStackTrace();
@@ -78,6 +100,7 @@ public class Buffer {
     public synchronized String stopExitAux(){
         while(aforo <6){
             try{
+                salidaBloqueada = true;
                 wait();
                 return "Salida 2 bloqueada\n";
 
@@ -86,7 +109,8 @@ public class Buffer {
             }
         }
         notify();
-        return "";
+        salidaBloqueada = false;
+        return "Salida 2 abierta\n";
 
     }
     
@@ -94,15 +118,17 @@ public class Buffer {
     public synchronized String stopEntryAux(){
         while(aforo >19){
             try{
+                entradaBloqueada = true;
                 wait();
-                return "Entrada 2 bloqueada.\n";
-               
+                return "Entrada 2 bloqueada\n";
+
             } catch (InterruptedException e){
                 e.printStackTrace();
             }
         }
         notify();
-        return "";
+        entradaBloqueada = false;
+        return "Entrada 2 abierta\n";
        
     }
     /**

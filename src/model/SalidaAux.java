@@ -63,8 +63,8 @@ public class SalidaAux extends Thread{
         cont = 0;
         
         while (true){
-            sala.txtArea.setText(buffer.stopExitAux() + sala.txtArea.getText());
-            paint.txtArea.setText(buffer.stopExitAux() + paint.txtArea.getText());
+            sala.txtArea.setText(buffer.getDateNow() + ". " + buffer.stopExitAux() + sala.txtArea.getText());
+            paint.txtArea.setText(buffer.getDateNow() + ". " + buffer.stopExitAux() + paint.txtArea.getText());
             
             
             if (wait){
@@ -77,18 +77,29 @@ public class SalidaAux extends Thread{
                     buffer.reanudar();
                 }
                 
+                // Si la salida no está bloqueada
+                if (!buffer.isSalidaBloqueada()){
+                    buffer.quit(1);
+                    sala.txtAforo.setText(String.valueOf(buffer.get()));
+                    paint.setAforo(buffer.get());
+
+                    sala.txtArea.setText(buffer.getDateNow() + ". Un cliente ha abandonado la sala por la Salida 2.\n" + sala.txtArea.getText());
+                    paint.txtArea.setText(buffer.getDateNow() + ". Un cliente ha abandonado la sala por la Salida 2.\n" + paint.txtArea.getText());
+                    try{
+                        sleep(dormir);
+                    } catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
                     
-                buffer.quit(1);
-                sala.txtAforo.setText(String.valueOf(buffer.get()));
-                paint.setAforo(buffer.get());
+                // Si la salida está bloqueada, esperaremos un segundo para volver a comprobarlo    
+                } else {
+                    try{
+                        sleep(1000);
+                    } catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
+                }   
                 
-                sala.txtArea.setText("Un cliente ha abandonado la sala por la Salida 2.\n" + sala.txtArea.getText());
-                paint.txtArea.setText("Un cliente ha abandonado la sala por la Salida 2.\n" + paint.txtArea.getText());
-                try{
-                    sleep(dormir);
-                } catch (InterruptedException e){
-                    e.printStackTrace();
-                }
 
                 
             }

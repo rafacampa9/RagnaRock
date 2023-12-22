@@ -19,7 +19,6 @@ public class EntradaAux extends Thread{
     private DrawView paint;
     private boolean wait;
     private int cont;
-
             
 
 
@@ -63,8 +62,8 @@ public class EntradaAux extends Thread{
         cont = 0;
         
         while (true){
-            sala.txtArea.setText(buffer.stopEntryAux() + sala.txtArea.getText());
-            paint.txtArea.setText(buffer.stopEntryAux() + paint.txtArea.getText());
+            sala.txtArea.setText(buffer.getDateNow() + ". " + buffer.stopEntryAux() + sala.txtArea.getText());
+            paint.txtArea.setText(buffer.getDateNow() + ". " + buffer.stopEntryAux() + paint.txtArea.getText());
              
             if (wait){
                buffer.pausar();
@@ -74,17 +73,36 @@ public class EntradaAux extends Thread{
                 if (cont == 1){
                     buffer.reanudar();
                 }
-                buffer.put(1);
-                sala.txtAforo.setText(String.valueOf(buffer.get()));
-                paint.setAforo(buffer.get());
                 
-                sala.txtArea.setText("Ha entrado un cliente por la Entrada 2.\n" + sala.txtArea.getText());
-                paint.txtArea.setText("Ha entrado un cliente por la Entrada 2.\n" + paint.txtArea.getText());
-                try{
-                    sleep(dormir);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                /**
+                 * Si la entrada no está bloqueada
+                 */
+                if (!buffer.isEntradaBloqueada()){
+                    buffer.put(1);
+                    sala.txtAforo.setText(String.valueOf(buffer.get()));
+                    paint.setAforo(buffer.get());
+
+                    sala.txtArea.setText(buffer.getDateNow() + ". Ha entrado un cliente por la Entrada 2.\n" + sala.txtArea.getText());
+                    paint.txtArea.setText(buffer.getDateNow() + ". Ha entrado un cliente por la Entrada 2.\n" + paint.txtArea.getText());
+                    try{
+                        sleep(dormir);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    
+                /**
+                 * Si la entrada está bloqueada, 
+                 * esperaremos un segundo para
+                 * volver a comprobarlo
+                 */
+                } else {
+                    try{
+                        sleep(1000);
+                    } catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
                 }
+                
                 
             }
            
