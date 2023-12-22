@@ -37,6 +37,8 @@ public class Sala extends javax.swing.JFrame {
         btnUpdate = new javax.swing.JButton();
         btnChange = new javax.swing.JButton();
         btnQuery = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -73,6 +75,10 @@ public class Sala extends javax.swing.JFrame {
 
         btnQuery.setText("CONSULTAS AFORO");
 
+        txtArea.setColumns(20);
+        txtArea.setRows(5);
+        jScrollPane1.setViewportView(txtArea);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -90,12 +96,15 @@ public class Sala extends javax.swing.JFrame {
                             .addComponent(txtAforo, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(26, 26, 26)
-                        .addComponent(btnUpdate)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnChange)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnQuery)))
-                .addContainerGap(30, Short.MAX_VALUE))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(btnUpdate)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnChange)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnQuery)))))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -113,7 +122,9 @@ public class Sala extends javax.swing.JFrame {
                     .addComponent(btnUpdate)
                     .addComponent(btnChange)
                     .addComponent(btnQuery))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(69, 69, 69))
         );
 
         jPanel1.add(jPanel3, java.awt.BorderLayout.CENTER);
@@ -184,7 +195,9 @@ public class Sala extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JTextField txtAforo;
+    public javax.swing.JTextArea txtArea;
     public javax.swing.JTextField txtDateTime;
     // End of variables declaration//GEN-END:variables
 }

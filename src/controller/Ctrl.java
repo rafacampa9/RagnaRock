@@ -19,9 +19,11 @@ import model.Buffer;
 import model.Conexion;
 import model.DateNow;
 import model.Entrada;
+import model.EntradaAux;
 import model.Registrar;
 import model.Registro;
 import model.Salida;
+import model.SalidaAux;
 import org.bson.Document;
 import view.DrawView;
 import view.InicioSala;
@@ -34,8 +36,10 @@ import view.Sala;
  */
 public class Ctrl extends WindowAdapter implements ActionListener{
     private Buffer buffer;
-    private Entrada entrada1, entrada2;
-    private Salida salida;
+    private Entrada entrada1;
+    private EntradaAux entrada2;
+    private Salida salida1;
+    private SalidaAux salida2;
     private final InicioSala init;
     private Sala sala;
     private final DrawView paint;
@@ -47,14 +51,15 @@ public class Ctrl extends WindowAdapter implements ActionListener{
     private MongoCollection <Document> collection;
     private final PicosAforo picos;
 
-    public Ctrl(Buffer buffer, Entrada entrada1, Entrada entrada2, 
-            Salida salida, InicioSala init, Sala sala, 
+    public Ctrl(Buffer buffer, Entrada entrada1, EntradaAux entrada2, 
+            Salida salida1, SalidaAux salida2, InicioSala init, Sala sala, 
             DrawView paint, PicosAforo picos, Conexion conn) {
         this.conn = conn;
         this.sala = sala;
         this.entrada1 = entrada1;
         this.entrada2 = entrada2;
-        this.salida = salida;
+        this.salida1 = salida1;
+        this.salida2 = salida2;
         this.init = init;
         this.sala = sala;
         this.picos = picos;
@@ -104,7 +109,7 @@ public class Ctrl extends WindowAdapter implements ActionListener{
      */
     public void iniciar(){
         init.setTitle("Controller");
-        init.setSize(404, 289);
+        init.setSize(404, 339);
         init.setResizable(false);
     }
     
@@ -122,7 +127,7 @@ public class Ctrl extends WindowAdapter implements ActionListener{
      * del aforo
      */
     
-    public void controlAforo(int dormir_entrada1, int dormir_entrada2, int dormir_salida, int cont, boolean wait){
+    public void controlAforo(int dormir_entrada1, int dormir_entrada2, int dormir_salida1, int dormir_salida2, int cont, boolean wait){
         /**
          * Si se abre la ventana init
          * por primera vez
@@ -132,17 +137,21 @@ public class Ctrl extends WindowAdapter implements ActionListener{
             conn.conectar();
             buffer = new Buffer();
             entrada1 = new Entrada(dormir_entrada1, buffer, sala, paint);
-            entrada2 = new Entrada(dormir_entrada2, buffer, sala, paint);
-            salida = new Salida(dormir_salida, buffer, sala, paint);
+            entrada2 = new EntradaAux(dormir_entrada2, buffer, sala, paint);
+            salida1 = new Salida(dormir_salida1, buffer, sala, paint);
+            salida2 = new SalidaAux (dormir_salida2, buffer, sala, paint);
             dateNow = new DateNow(buffer, sala, paint);
             reg = new Registrar(buffer, conn);
                
             entrada1.start();
             entrada2.start();
-            salida.start();
+            salida1.start();
+            salida2.start();
             dateNow.start();
             reg.start();
             cont = 1;
+            
+            
          
         /**
          * En este caso, ya se ha abierto
@@ -155,12 +164,14 @@ public class Ctrl extends WindowAdapter implements ActionListener{
         } else {
             entrada1.setWait(wait);
             entrada2.setWait(wait);
-            salida.setWait(wait);
+            salida1.setWait(wait);
+            salida2.setWait(wait);
                 
             entrada1.setDormir(dormir_entrada1);
             entrada2.setDormir(dormir_entrada2);
-            salida.setDormir(dormir_salida);
-    
+            salida1.setDormir(dormir_salida1);
+            salida2.setDormir(dormir_salida2);
+  
         }    
     }
 
@@ -178,41 +189,49 @@ public class Ctrl extends WindowAdapter implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {    
         
-        int dormirEntrada1, dormirEntrada2, dormirSalida;
+        int dormirEntrada1, dormirEntrada2, dormirSalida, dormirSalida2;
         /**
          * Si el botón pulsado es ENVIAR de 
          * la ventana init
          */
         if (e.getSource() == init.btnSend){
             if (cont != 0){
-                controlAforo(0, 0, 0, cont, true);
+                controlAforo(0, 0, 0,0, cont, true);
             }
             if (!init.txtEntrada1.getText().isEmpty() && init.txtEntrada1.getText()!= null
                     && !init.txtEntrada2.getText().isEmpty() && init.txtEntrada2.getText()!= null 
-                    && !init.txtSalida.getText().isEmpty() && init.txtSalida.getText()!= null){
+                    && !init.txtSalida.getText().isEmpty() && init.txtSalida.getText()!= null
+                    && !init.txtSalida2.getText().isEmpty() && init.txtSalida2.getText()!=null){
                 
                 try {
                     dormirEntrada1 = (int) Math.round(Double.parseDouble(init.txtEntrada1.getText()));
                     dormirEntrada2 = (int) Math.round(Double.parseDouble(init.txtEntrada2.getText()));
                     dormirSalida = (int) Math.round(Double.parseDouble(init.txtSalida.getText()));
+                    dormirSalida2 = (int) Math.round(Double.parseDouble(init.txtSalida2.getText()));
+                    
+                    
                 } catch (NumberFormatException ex) {
-           
+                    // Si los valores introducidos no son numéricos
                     Random rand = new Random();
                     dormirEntrada1 = rand.nextInt(9001) + 1000;
                     dormirEntrada2 = rand.nextInt(9001) + 1000;
                     dormirSalida = rand.nextInt(9001) + 1000;
+                    dormirSalida2 = rand.nextInt(9001) + 1000;
                 }   
+                
             } else {
                 Random rand = new Random();               
                 dormirEntrada1 = rand.nextInt(9001) + 1000;
                 dormirEntrada2 = rand.nextInt(9001) + 1000;
-                dormirSalida = rand.nextInt(9001) + 1000;   
+                dormirSalida = rand.nextInt(9001) + 1000; 
+                dormirSalida2 = rand.nextInt(9001) + 1000;
             }
             
             controlAforo(
                 dormirEntrada1,
                 dormirEntrada2,
                 dormirSalida,
+                dormirSalida2,
                 cont,
                 false
             );
@@ -245,7 +264,7 @@ public class Ctrl extends WindowAdapter implements ActionListener{
         if (e.getSource()==sala.btnChange){
             paint.setTitle("RagnaRock");
             paint.setLocationRelativeTo(null);
-            paint.setSize(500, 580);
+            paint.setSize(500, 700);
             paint.setResizable(false);
             paint.setVisible(true);
             sala.setVisible(false);
@@ -337,7 +356,9 @@ public class Ctrl extends WindowAdapter implements ActionListener{
         sala.setLocationRelativeTo(null);
         sala.setResizable(false);
         sala.setVisible(true);
-        sala.setSize(468, 315);
+        sala.setSize(480, 435);
     }
+    
+    
 }
 

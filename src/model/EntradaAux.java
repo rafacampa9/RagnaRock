@@ -4,6 +4,7 @@
  */
 package model;
 
+import static java.lang.Thread.sleep;
 import view.DrawView;
 import view.Sala;
 
@@ -11,23 +12,25 @@ import view.Sala;
  *
  * @author rafacampa9
  */
-
-public class Salida extends Thread{
+public class EntradaAux extends Thread{
     private int dormir;
     private Buffer buffer;
     private Sala sala;
+    private DrawView paint;
     private boolean wait;
     private int cont;
-    private DrawView paint;
 
-    public Salida(int dormir, Buffer buffer, Sala sala, DrawView paint) {
+            
+
+
+    public EntradaAux(int dormir, Buffer buffer, Sala sala, DrawView paint) {
         this.dormir = dormir;
         this.buffer = buffer;
         this.sala = sala;
         this.paint = paint;
+
     }
-    
-    
+
     
     /**
      * 
@@ -37,8 +40,6 @@ public class Salida extends Thread{
      * serán utilizados para modificar los parámetros
      * de frecuencia de salida
      */
-    
-    
     public int getDormir() {
         return dormir;
     }
@@ -47,14 +48,14 @@ public class Salida extends Thread{
         this.dormir = dormir;
     }
     
-    
-    public void setWait(boolean wait){
-        this.wait=wait;
-    }
-    
     public boolean getWait(){
         return wait;
     }
+    
+    public void setWait(boolean wait){
+        this.wait = wait;
+    }
+    
 
     @Override
     public void run() {
@@ -62,30 +63,32 @@ public class Salida extends Thread{
         cont = 0;
         
         while (true){
+            sala.txtArea.setText(buffer.stopEntryAux() + sala.txtArea.getText());
+            paint.txtArea.setText(buffer.stopEntryAux() + paint.txtArea.getText());
+             
             if (wait){
-                buffer.pausar();
-                cont=1;
-                
+               buffer.pausar();
+               
+               cont = 1;
             } else{
                 if (cont == 1){
                     buffer.reanudar();
                 }
-                buffer.quit(1);
-                try{
-                    sleep(dormir);
-                } catch (InterruptedException e){
-                    e.printStackTrace();
-                }
-
+                buffer.put(1);
                 sala.txtAforo.setText(String.valueOf(buffer.get()));
                 paint.setAforo(buffer.get());
                 
-                sala.txtArea.setText("Un cliente ha abandonado la sala por la Salida 1.\n" + sala.txtArea.getText());
-                paint.txtArea.setText("Un cliente ha abandonado la sala por la Salida 1.\n" + paint.txtArea.getText());
+                sala.txtArea.setText("Ha entrado un cliente por la Entrada 2.\n" + sala.txtArea.getText());
+                paint.txtArea.setText("Ha entrado un cliente por la Entrada 2.\n" + paint.txtArea.getText());
+                try{
+                    sleep(dormir);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                
             }
-            
-
+           
         }
+
     }
 }
-

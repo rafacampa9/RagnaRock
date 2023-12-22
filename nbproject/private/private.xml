@@ -5,15 +5,19 @@
         <group>
             <file>file:/D:/Documentos/NetBeansProjects/RagnaRock/src/ragnarock/RagnaRock.java</file>
             <file>file:/D:/Documentos/NetBeansProjects/RagnaRock/src/view/DrawView.java</file>
-            <file>file:/D:/Documentos/NetBeansProjects/RagnaRock/src/model/Buffer.java</file>
             <file>file:/D:/Documentos/NetBeansProjects/RagnaRock/src/model/Salida.java</file>
             <file>file:/D:/Documentos/NetBeansProjects/RagnaRock/src/model/DateNow.java</file>
             <file>file:/D:/Documentos/NetBeansProjects/RagnaRock/src/view/Sala.java</file>
+            <file>file:/D:/Documentos/NetBeansProjects/RagnaRock/src/model/Registrar.java</file>
+            <file>file:/D:/Documentos/NetBeansProjects/RagnaRock/src/model/EntradaAux.java</file>
+            <file>file:/D:/Documentos/NetBeansProjects/RagnaRock/src/controller/Ctrl.java</file>
+            <file>file:/D:/Documentos/NetBeansProjects/RagnaRock/src/model/SalidaAux.java</file>
+            <file>file:/D:/Documentos/NetBeansProjects/RagnaRock/src/view/PicosAforo.java</file>
+            <file>file:/D:/Documentos/NetBeansProjects/RagnaRock/src/model/Buffer.java</file>
             <file>file:/D:/Documentos/NetBeansProjects/RagnaRock/src/view/InicioSala.java</file>
             <file>file:/D:/Documentos/NetBeansProjects/RagnaRock/src/model/Entrada.java</file>
             <file>file:/D:/Documentos/NetBeansProjects/RagnaRock/src/model/Conexion.java</file>
-            <file>file:/D:/Documentos/NetBeansProjects/RagnaRock/src/controller/Ctrl.java</file>
-            <file>file:/D:/Documentos/NetBeansProjects/RagnaRock/src/model/Registros.java</file>
+            <file>file:/D:/Documentos/NetBeansProjects/RagnaRock/src/model/Registro.java</file>
         </group>
     </open-files>
 </project-private>

@@ -73,8 +73,38 @@ public class Buffer {
         aforo -= value;
         System.out.println("Aforo actual: " + aforo);
     }
-
     
+   
+    public synchronized String stopExitAux(){
+        while(aforo <6){
+            try{
+                wait();
+                return "Salida 2 bloqueada\n";
+
+            } catch (InterruptedException e){
+                e.printStackTrace();
+            }
+        }
+        notify();
+        return "";
+
+    }
+    
+    
+    public synchronized String stopEntryAux(){
+        while(aforo >19){
+            try{
+                wait();
+                return "Entrada 2 bloqueada.\n";
+               
+            } catch (InterruptedException e){
+                e.printStackTrace();
+            }
+        }
+        notify();
+        return "";
+       
+    }
     /**
      * 
      * @return 

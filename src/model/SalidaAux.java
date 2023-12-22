@@ -4,6 +4,7 @@
  */
 package model;
 
+import static java.lang.Thread.sleep;
 import view.DrawView;
 import view.Sala;
 
@@ -11,8 +12,8 @@ import view.Sala;
  *
  * @author rafacampa9
  */
-
-public class Salida extends Thread{
+public class SalidaAux extends Thread{
+    
     private int dormir;
     private Buffer buffer;
     private Sala sala;
@@ -20,7 +21,7 @@ public class Salida extends Thread{
     private int cont;
     private DrawView paint;
 
-    public Salida(int dormir, Buffer buffer, Sala sala, DrawView paint) {
+    public SalidaAux(int dormir, Buffer buffer, Sala sala, DrawView paint) {
         this.dormir = dormir;
         this.buffer = buffer;
         this.sala = sala;
@@ -62,30 +63,38 @@ public class Salida extends Thread{
         cont = 0;
         
         while (true){
+            sala.txtArea.setText(buffer.stopExitAux() + sala.txtArea.getText());
+            paint.txtArea.setText(buffer.stopExitAux() + paint.txtArea.getText());
+            
+            
             if (wait){
                 buffer.pausar();
                 cont=1;
                 
             } else{
+                
                 if (cont == 1){
                     buffer.reanudar();
                 }
+                
+                    
                 buffer.quit(1);
+                sala.txtAforo.setText(String.valueOf(buffer.get()));
+                paint.setAforo(buffer.get());
+                
+                sala.txtArea.setText("Un cliente ha abandonado la sala por la Salida 2.\n" + sala.txtArea.getText());
+                paint.txtArea.setText("Un cliente ha abandonado la sala por la Salida 2.\n" + paint.txtArea.getText());
                 try{
                     sleep(dormir);
                 } catch (InterruptedException e){
                     e.printStackTrace();
                 }
 
-                sala.txtAforo.setText(String.valueOf(buffer.get()));
-                paint.setAforo(buffer.get());
                 
-                sala.txtArea.setText("Un cliente ha abandonado la sala por la Salida 1.\n" + sala.txtArea.getText());
-                paint.txtArea.setText("Un cliente ha abandonado la sala por la Salida 1.\n" + paint.txtArea.getText());
             }
             
 
         }
     }
+    
 }
-

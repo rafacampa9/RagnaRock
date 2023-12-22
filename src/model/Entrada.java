@@ -15,18 +15,18 @@ public class Entrada extends Thread{
     private int dormir;
     private Buffer buffer;
     private Sala sala;
-    private DrawView view;
+    private DrawView paint;
     private boolean wait;
     private int cont;
-    
             
 
 
-    public Entrada(int dormir, Buffer buffer, Sala sala, DrawView view) {
+    public Entrada(int dormir, Buffer buffer, Sala sala, DrawView paint) {
         this.dormir = dormir;
         this.buffer = buffer;
         this.sala = sala;
-        this.view = view;
+        this.paint = paint;
+       
     }
 
     
@@ -76,12 +76,12 @@ public class Entrada extends Thread{
                     e.printStackTrace();
                 }
                 sala.txtAforo.setText(String.valueOf(buffer.get()));
-                view.setAforo(buffer.get());
-                }
-            
-            
-            
-            
+                paint.setAforo(buffer.get());
+                
+                sala.txtArea.setText("Ha entrado un cliente por la Entrada 1.\n" + sala.txtArea.getText());
+                paint.txtArea.setText("Ha entrado un cliente por la Entrada 1.\n" + paint.txtArea.getText());
+            }
+           
         }
 
     }

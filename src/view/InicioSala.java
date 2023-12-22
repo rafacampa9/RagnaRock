@@ -39,6 +39,8 @@ public class InicioSala extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         txtSalida = new javax.swing.JTextField();
         btnSend = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        txtSalida2 = new javax.swing.JTextField();
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -66,6 +68,7 @@ public class InicioSala extends javax.swing.JFrame {
 
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel2.setText("Frecuencia 1ª entrada:");
         jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, -1, 20));
 
@@ -80,14 +83,21 @@ public class InicioSala extends javax.swing.JFrame {
         jPanel4.add(txtEntrada2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 60, 100, 20));
 
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel4.setText("Frecuencia salida:");
+        jLabel4.setText("Frecuencia 1ª salida:");
         jPanel4.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 100, 120, 20));
 
         txtSalida.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jPanel4.add(txtSalida, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 100, 100, 20));
 
         btnSend.setText("ENVIAR");
-        jPanel4.add(btnSend, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 140, -1, -1));
+        jPanel4.add(btnSend, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 190, -1, -1));
+
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel5.setText("Frecuencia 2ª salida:");
+        jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(57, 140, 130, -1));
+
+        txtSalida2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jPanel4.add(txtSalida2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 140, 100, -1));
 
         jPanel1.add(jPanel4, java.awt.BorderLayout.CENTER);
 
@@ -101,7 +111,7 @@ public class InicioSala extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
         );
 
         pack();
@@ -155,6 +165,7 @@ public class InicioSala extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -162,5 +173,6 @@ public class InicioSala extends javax.swing.JFrame {
     public javax.swing.JTextField txtEntrada1;
     public javax.swing.JTextField txtEntrada2;
     public javax.swing.JTextField txtSalida;
+    public javax.swing.JTextField txtSalida2;
     // End of variables declaration//GEN-END:variables
 }
