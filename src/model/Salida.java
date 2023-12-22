@@ -26,7 +26,19 @@ public class Salida extends Thread{
         this.sala = sala;
         this.view = view;
     }
-
+    
+    
+    
+    /**
+     * 
+     * @return
+     * 
+     * Los métodos get y set de a continuación
+     * serán utilizados para modificar los parámetros
+     * de frecuencia de salida
+     */
+    
+    
     public int getDormir() {
         return dormir;
     }

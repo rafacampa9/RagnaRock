@@ -18,6 +18,7 @@ public class Entrada extends Thread{
     private DrawView view;
     private boolean wait;
     private int cont;
+    
             
 
 
@@ -28,6 +29,15 @@ public class Entrada extends Thread{
         this.view = view;
     }
 
+    
+    /**
+     * 
+     * @return
+     * 
+     * Los métodos get y set de a continuación
+     * serán utilizados para modificar los parámetros
+     * de frecuencia de salida
+     */
     public int getDormir() {
         return dormir;
     }
@@ -35,8 +45,6 @@ public class Entrada extends Thread{
     public void setDormir(int dormir) {
         this.dormir = dormir;
     }
-    
-    
     
     public boolean getWait(){
         return wait;
