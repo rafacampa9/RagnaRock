@@ -73,7 +73,7 @@ public class Sala extends javax.swing.JFrame {
 
         btnChange.setText("CAMBIAR VISTA");
 
-        btnQuery.setText("CONSULTAS AFORO");
+        btnQuery.setText("PICOS DE AFORO");
 
         txtArea.setColumns(20);
         txtArea.setRows(5);
@@ -99,11 +99,12 @@ public class Sala extends javax.swing.JFrame {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(8, 8, 8)
                                 .addComponent(btnUpdate)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnChange)
+                                .addComponent(btnChange, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnQuery)))))
+                                .addComponent(btnQuery, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -122,9 +123,9 @@ public class Sala extends javax.swing.JFrame {
                     .addComponent(btnUpdate)
                     .addComponent(btnChange)
                     .addComponent(btnQuery))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(69, 69, 69))
+                .addContainerGap(80, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel3, java.awt.BorderLayout.CENTER);

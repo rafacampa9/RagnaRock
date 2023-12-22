@@ -264,7 +264,7 @@ public class Ctrl extends WindowAdapter implements ActionListener{
         if (e.getSource()==sala.btnChange){
             paint.setTitle("RagnaRock");
             paint.setLocationRelativeTo(null);
-            paint.setSize(500, 700);
+            paint.setSize(490, 700);
             paint.setResizable(false);
             paint.setVisible(true);
             sala.setVisible(false);

@@ -112,14 +112,14 @@ public class DrawView extends javax.swing.JFrame {
         txtDateTime.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jPanel3.add(txtDateTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 0, 250, 20));
 
-        btnQuery.setText("CONSULTAS AFORO");
+        btnQuery.setText("PICOS DE AFORO");
         jPanel3.add(btnQuery, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 380, -1, -1));
 
         txtArea.setColumns(20);
         txtArea.setRows(5);
         jScrollPane1.setViewportView(txtArea);
 
-        jPanel3.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 430, 450, 100));
+        jPanel3.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 430, 430, 100));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
