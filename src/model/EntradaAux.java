@@ -17,7 +17,7 @@ public class EntradaAux extends Thread{
     private Buffer buffer;
     private Sala sala;
     private DrawView paint;
-    private boolean wait;
+    private boolean wait, block, free, changedBlock;
     private int cont;
             
 
@@ -60,7 +60,9 @@ public class EntradaAux extends Thread{
     public void run() {
         wait = false;
         cont = 0;
-        
+        block = false;
+        free = false;
+        changedBlock = false;
         while (true){
             sala.txtArea.setText(buffer.getDateNow() + ". " + buffer.stopEntryAux() + sala.txtArea.getText());
             paint.txtArea.setText(buffer.getDateNow() + ". " + buffer.stopEntryAux() + paint.txtArea.getText());
@@ -78,12 +80,23 @@ public class EntradaAux extends Thread{
                  * Si la entrada no está bloqueada
                  */
                 if (!buffer.isEntradaBloqueada()){
+                    block = false;
+                    if (!free){
+                        sala.txtArea.setText(String.valueOf(bloqueo()));
+                        paint.txtArea.setText(String.valueOf(bloqueo()));
+                        setChangedBlock(true);
+                               
+                    } else{
+                        setChangedBlock(false);
+                    }
+                    free = true;
+                    
                     buffer.put(1);
                     sala.txtAforo.setText(String.valueOf(buffer.get()));
                     paint.setAforo(buffer.get());
 
-                    sala.txtArea.setText(buffer.getDateNow() + ". Ha entrado un cliente por la Entrada 2.\n" + sala.txtArea.getText());
-                    paint.txtArea.setText(buffer.getDateNow() + ". Ha entrado un cliente por la Entrada 2.\n" + paint.txtArea.getText());
+                    sala.txtArea.setText(movimiento());
+                    paint.txtArea.setText(movimiento());
                     try{
                         sleep(dormir);
                     } catch (InterruptedException e) {
@@ -96,17 +109,48 @@ public class EntradaAux extends Thread{
                  * volver a comprobarlo
                  */
                 } else {
-                    try{
+                    free = false;
+                    if (!block){
+                        sala.txtArea.setText(bloqueo());   
+                        paint.txtArea.setText(bloqueo());
+                        setChangedBlock(true);
+                    } else{
+                        setChangedBlock(false);
+                    }
+                    block=true;
+                    
+                    /*
+                    try{   
                         sleep(1000);
                     } catch (InterruptedException e){
-                        e.printStackTrace();
-                    }
+                        e.printStackTrace();*/
                 }
-                
                 
             }
            
         }
 
     }
+    
+    public String movimiento(){
+        return buffer.getDateNow() + ". Ha entrado un cliente por la Entrada 2.\n" + sala.txtArea.getText();
+    }
+    
+    public String bloqueo(){
+        return buffer.getDateNow() + ". " + buffer.stopEntryAux() + sala.txtArea.getText();
+    }
+
+    public boolean isChangedBlock() {
+        return changedBlock;
+    }
+
+    public void setChangedBlock(boolean changedBlock) {
+        this.changedBlock = changedBlock;
+    }
+    
+    
+    
+    
+    
+    
 }

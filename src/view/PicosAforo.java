@@ -38,6 +38,7 @@ public class PicosAforo extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tableMin = new javax.swing.JTable();
+        btnBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -60,7 +61,7 @@ public class PicosAforo extends javax.swing.JFrame {
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
         );
 
-        jPanel3.setLayout(new java.awt.GridLayout(2, 1));
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel4.setLayout(new java.awt.BorderLayout());
 
@@ -89,7 +90,7 @@ public class PicosAforo extends javax.swing.JFrame {
 
         jPanel4.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        jPanel3.add(jPanel4);
+        jPanel3.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 470, 130));
 
         jPanel5.setLayout(new java.awt.BorderLayout());
 
@@ -118,7 +119,10 @@ public class PicosAforo extends javax.swing.JFrame {
 
         jPanel5.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-        jPanel3.add(jPanel5);
+        jPanel3.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(66, 176, 460, 130));
+
+        btnBack.setText("VOLVER");
+        jPanel3.add(btnBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 330, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -137,7 +141,7 @@ public class PicosAforo extends javax.swing.JFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE))
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE))
         );
 
         pack();
@@ -186,6 +190,7 @@ public class PicosAforo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JButton btnBack;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -78,12 +78,16 @@ public class Entrada extends Thread{
                 sala.txtAforo.setText(String.valueOf(buffer.get()));
                 paint.setAforo(buffer.get());
                 
-                sala.txtArea.setText(buffer.getDateNow() + ". Ha entrado un cliente por la Entrada 1.\n" + sala.txtArea.getText());
-                paint.txtArea.setText(buffer.getDateNow() + ". Ha entrado un cliente por la Entrada 1.\n" + paint.txtArea.getText());
+                sala.txtArea.setText(movimiento());
+                paint.txtArea.setText(movimiento());
             }
            
         }
 
+    }
+    
+    public String movimiento(){
+        return buffer.getDateNow() + ". Ha entrado un cliente por la Entrada 1.\n" + sala.txtArea.getText();
     }
 }
 

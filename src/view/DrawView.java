@@ -98,10 +98,10 @@ public class DrawView extends javax.swing.JFrame {
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnUpdate.setText("MODIFICAR");
-        jPanel3.add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 380, -1, -1));
+        jPanel3.add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 380, -1, -1));
 
         btnChange.setText("CAMBIAR VISTA");
-        jPanel3.add(btnChange, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 380, -1, -1));
+        jPanel3.add(btnChange, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 380, -1, -1));
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Fecha y hora actual:");
@@ -112,8 +112,8 @@ public class DrawView extends javax.swing.JFrame {
         txtDateTime.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jPanel3.add(txtDateTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 0, 250, 20));
 
-        btnQuery.setText("PICOS DE AFORO");
-        jPanel3.add(btnQuery, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 380, -1, -1));
+        btnQuery.setText("CONSULTAS AFORO");
+        jPanel3.add(btnQuery, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 380, 150, -1));
 
         txtArea.setColumns(20);
         txtArea.setRows(5);

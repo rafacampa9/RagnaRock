@@ -12,9 +12,13 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Random;
+import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
+import javax.swing.JTable;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import model.Buffer;
 import model.Conexion;
 import model.DateNow;
@@ -25,8 +29,11 @@ import model.Registro;
 import model.Salida;
 import model.SalidaAux;
 import org.bson.Document;
+import view.Bloqueos;
 import view.DrawView;
 import view.InicioSala;
+import view.Movimientos;
+import view.PanelConsultas;
 import view.PicosAforo;
 import view.Sala;
 
@@ -50,10 +57,16 @@ public class Ctrl extends WindowAdapter implements ActionListener{
     private Registrar reg;
     private MongoCollection <Document> collection;
     private final PicosAforo picos;
-
+    private final Bloqueos block;
+    private final Movimientos mov;
+    private final PanelConsultas panel;
+    private ButtonGroup grupo;
+    
+    
     public Ctrl(Buffer buffer, Entrada entrada1, EntradaAux entrada2, 
             Salida salida1, SalidaAux salida2, InicioSala init, Sala sala, 
-            DrawView paint, PicosAforo picos, Conexion conn) {
+            DrawView paint,  PanelConsultas panel,PicosAforo picos, 
+            Bloqueos block, Movimientos mov, Conexion conn) {
         this.conn = conn;
         this.sala = sala;
         this.entrada1 = entrada1;
@@ -63,7 +76,10 @@ public class Ctrl extends WindowAdapter implements ActionListener{
         this.init = init;
         this.sala = sala;
         this.picos = picos;
+        this.panel = panel;
         this.paint = paint;
+        this.block = block;
+        this.mov = mov;
         
         this.sala.btnQuery.addActionListener(this);
         this.paint.btnQuery.addActionListener(this);
@@ -78,6 +94,18 @@ public class Ctrl extends WindowAdapter implements ActionListener{
         
         this.paint.btnChange.addActionListener(this);
         this.paint.btnUpdate.addActionListener(this);
+        
+        this.picos.btnBack.addActionListener(this);
+        this.mov.btnBack.addActionListener(this);
+        this.block.btnBack.addActionListener(this);
+        
+        grupo = new ButtonGroup();
+        grupo.add(panel.rbBlock);
+        grupo.add(panel.rbMov);
+        grupo.add(panel.rbMinMax);
+        this.panel.rbBlock.addActionListener(this);
+        this.panel.rbMinMax.addActionListener(this);
+        this.panel.rbMov.addActionListener(this);
         
         this.sala.addWindowListener(this);
         this.paint.addWindowListener(this);
@@ -99,7 +127,20 @@ public class Ctrl extends WindowAdapter implements ActionListener{
     */
     @Override
     public void windowClosing(WindowEvent e){
+        /**
+         * Para que no salte Exception al cerrar
+         * el programa con el foco en una de las
+         * ventanas que nos está devolviendo
+         * una consulta de la base de datos
+         */
+        if (picos.getFocusableWindowState())
+            picos.dispose();
+        else if (mov.getFocusableWindowState())
+            mov.dispose();
+        else if (block.getFocusableWindowState())
+            block.dispose();
         conn.cerrarConexion();
+        
     }
 
     
@@ -141,7 +182,7 @@ public class Ctrl extends WindowAdapter implements ActionListener{
             salida1 = new Salida(dormir_salida1, buffer, sala, paint);
             salida2 = new SalidaAux (dormir_salida2, buffer, sala, paint);
             dateNow = new DateNow(buffer, sala, paint);
-            reg = new Registrar(buffer, conn);
+            reg = new Registrar(buffer, conn, entrada1, salida1, entrada2, salida2);
                
             entrada1.start();
             entrada2.start();
@@ -190,6 +231,8 @@ public class Ctrl extends WindowAdapter implements ActionListener{
     public void actionPerformed(ActionEvent e) {    
         
         int dormirEntrada1, dormirEntrada2, dormirSalida, dormirSalida2;
+        JTable table = mov.tbMov;
+        DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
         /**
          * Si el botón pulsado es ENVIAR de 
          * la ventana init
@@ -264,7 +307,7 @@ public class Ctrl extends WindowAdapter implements ActionListener{
         if (e.getSource()==sala.btnChange){
             paint.setTitle("RagnaRock");
             paint.setLocationRelativeTo(null);
-            paint.setSize(490, 700);
+            paint.setSize(495, 700);
             paint.setResizable(false);
             paint.setVisible(true);
             sala.setVisible(false);
@@ -290,6 +333,14 @@ public class Ctrl extends WindowAdapter implements ActionListener{
          * sala o paint
          */
         if (e.getSource() == sala.btnQuery || e.getSource()==paint.btnQuery){
+            panel.setTitle("Consultas de aforo");
+            panel.setSize(478,300);
+            panel.setLocation(700,300);
+            panel.setVisible(true);
+            panel.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        }
+        
+        if (e.getSource()==panel.rbMinMax){
             DefaultTableModel tableMax = (DefaultTableModel) picos.tableMax.getModel();
             ArrayList<Registro> picosMax = conn.picosMax();
             
@@ -318,9 +369,83 @@ public class Ctrl extends WindowAdapter implements ActionListener{
             
             picos.setVisible(true);
             picos.setResizable(false);
-            picos.setLocationRelativeTo(null);
+            picos.setLocationRelativeTo(panel);
             picos.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            panel.setVisible(false);
           
+        }
+        
+        
+        if (e.getSource()==panel.rbMov){
+            TableColumn columnMov;
+            
+            
+            TableColumnModel column  = table.getColumnModel();
+            columnMov = column.getColumn(4);
+            columnMov.setPreferredWidth(350);
+            
+            ArrayList <Registro> movimientos = conn.entryExit();
+
+            
+            for (Registro movimiento: movimientos){
+                Object [] rowMov = {
+                    movimiento.getId(),
+                    movimiento.getFecha(),
+                    movimiento.getHora(),
+                    movimiento.getAforo(),
+                    movimiento.getMovimiento()
+                };
+                
+                tableModel.addRow(rowMov);
+            }
+            
+            mov.setTitle("Movimientos de aforo");
+            mov.setSize(784, 441);
+            mov.setLocationRelativeTo(panel);
+            mov.setVisible(true);
+            mov.setResizable(false);            
+            mov.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            panel.setVisible(false);
+        }
+        
+        
+        if (e.getSource() == panel.rbBlock){
+            DefaultTableModel tabla = (DefaultTableModel) block.tbBlock.getModel();
+            ArrayList <Registro> bloqueos = conn.block();
+            
+            for (Registro bloqueo: bloqueos){
+                Object [] rowBlock = {
+                    bloqueo.getId(),
+                    bloqueo.getFecha(),
+                    bloqueo.getHora(),
+                    bloqueo.getEstado()
+                };
+                
+                tabla.addRow(rowBlock);
+                
+            }
+            block.setTitle("Bloqueos de Entrada/Salida");
+            block.setSize(761,418);
+            block.setLocationRelativeTo(panel);
+            block.setVisible(true);
+            block.setResizable(false);
+            block.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            panel.setVisible(false);
+        }
+        
+        if (e.getSource()== block.btnBack){
+            block.setVisible(false);
+            panel.setVisible(true);
+        }
+        
+        if (e.getSource() == mov.btnBack){
+            mov.setVisible(false);
+            panel.setVisible(true);
+        }
+        
+        if (e.getSource() == picos.btnBack){
+            picos.setVisible(false);
+            panel.setVisible(true);
         }
         
     }
@@ -356,9 +481,9 @@ public class Ctrl extends WindowAdapter implements ActionListener{
         sala.setLocationRelativeTo(null);
         sala.setResizable(false);
         sala.setVisible(true);
-        sala.setSize(480, 435);
+        sala.setSize(485, 435);
     }
     
-    
+   
 }
 

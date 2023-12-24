@@ -86,15 +86,14 @@
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="jScrollPane1" min="-2" pref="412" max="-2" attributes="0"/>
                                   <Group type="102" attributes="0">
-                                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                                       <Component id="btnUpdate" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="btnChange" min="-2" pref="125" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="btnQuery" min="-2" pref="138" max="-2" attributes="0"/>
+                                      <Component id="btnQuery" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -116,15 +115,15 @@
                           <Component id="jLabel2" alignment="3" min="-2" pref="55" max="-2" attributes="0"/>
                           <Component id="txtAforo" alignment="3" min="-2" pref="55" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="btnUpdate" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btnChange" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnQuery" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnQuery" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jScrollPane1" min="-2" pref="107" max="-2" attributes="0"/>
-                      <EmptySpace pref="80" max="32767" attributes="0"/>
+                      <EmptySpace pref="78" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -190,7 +189,7 @@
             </Component>
             <Component class="javax.swing.JButton" name="btnQuery">
               <Properties>
-                <Property name="text" type="java.lang.String" value="PICOS DE AFORO"/>
+                <Property name="text" type="java.lang.String" value="CONSULTAS AFORO"/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>

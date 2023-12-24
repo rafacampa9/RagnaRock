@@ -80,12 +80,16 @@ public class Salida extends Thread{
                 sala.txtAforo.setText(String.valueOf(buffer.get()));
                 paint.setAforo(buffer.get());
                 
-                sala.txtArea.setText(buffer.getDateNow() + ". Un cliente ha abandonado la sala por la Salida 1.\n" + sala.txtArea.getText());
-                paint.txtArea.setText(buffer.getDateNow() + ". Un cliente ha abandonado la sala por la Salida 1.\n" + paint.txtArea.getText());
+                sala.txtArea.setText(movimiento());
+                paint.txtArea.setText(movimiento());
             }
             
 
         }
+    }
+    
+    public String movimiento(){
+        return buffer.getDateNow() + ". Un cliente ha abandonado la sala por la Salida 1.\n" + sala.txtArea.getText();
     }
 }
 

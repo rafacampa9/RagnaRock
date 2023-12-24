@@ -10,8 +10,8 @@ package model;
  */
 public class Registro {
     
-    private int id;
-    private String  fecha, hora;
+    private int id, aforo;
+    private String  fecha, hora, movimiento, estado;
 
     public Registro() {
     }
@@ -22,6 +22,22 @@ public class Registro {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getAforo() {
+        return aforo;
+    }
+
+    public void setAforo(int aforo) {
+        this.aforo = aforo;
+    }
+
+    public String getMovimiento() {
+        return movimiento;
+    }
+
+    public void setMovimiento(String movimiento) {
+        this.movimiento = movimiento;
     }
 
     public String getFecha() {
@@ -38,6 +54,14 @@ public class Registro {
 
     public void setHora(String hora) {
         this.hora = hora;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
     
     

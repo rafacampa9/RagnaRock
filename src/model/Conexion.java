@@ -10,8 +10,10 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import java.util.ArrayList;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 /**
  *
@@ -22,7 +24,7 @@ public class Conexion {
     private static final String HOST = "localhost";
     private static final int PORT = 27017;
     private static final String DB = "RAGNAROCK";
-    private static final String COLLECTION = "PICOS DE AFORO";
+    private static final String COLLECTION = "AFORO";
     
     private MongoCollection<Document> collection;
     private MongoClient mongoClient;
@@ -33,9 +35,10 @@ public class Conexion {
      * Constructor vacío
      */
     public Conexion(){
-        //conectar();
+        conectar();
         //crearDB();
-        //crearConexion();
+        crearColeccion();
+        //borrarColeccion();
     }
     
     /**
@@ -111,18 +114,48 @@ public class Conexion {
     
     /**
      * Por si en algún momento
-     * queremos eliminar la colección
+     * queremos eliminar la DB
      */
-    public void borrarColeccion(){
+    public void borrarDB(){
         try{
             if (mongoClient.listDatabaseNames().into(new ArrayList<>()).contains(DB)){
-                conectar();
+
                 //Eliminar la base de datos
                 mongoClient.dropDatabase(DB);
                 System.out.println("Base de datos eliminada: " + DB);
                 
             } else {
-                System.out.println("Base de datos no existía: " + DB);
+                System.out.println("Base de datos no existe: " + DB);
+            }
+        } catch (MongoException e){
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Por si queremos eliminar
+     * alguna colección
+     */
+    public void borrarColeccion(){
+        
+        try{
+            if (mongoClient.listDatabaseNames().into(new ArrayList<>()).contains(DB)){
+                
+                //Obtenemos la DB 
+                database =mongoClient.getDatabase(DB);
+                
+                //Obtenemos la colección y la eliminamos
+                collection = database.getCollection(COLLECTION);
+                
+                // Verificamos si la colección existe antes de intentar eliminarla
+                if(database.listCollectionNames().into(new ArrayList<>()).contains(COLLECTION)){
+                    collection.drop();
+                    System.out.println("Colección eliminada: " + collection);
+                } else{
+                    System.out.println("Esta colección no existe");
+                }
+            } else {
+                System.out.println("Esta colebase de datos no existe: " + collection);
             }
         } catch (MongoException e){
             e.printStackTrace();
@@ -176,7 +209,7 @@ public class Conexion {
         collection = database.getCollection(COLLECTION);
         registros = new ArrayList<>();
         int cont = 1;
-        Document query = new Document("Máximo aforo", true);
+        Document query = new Document("Aforo", 25);
         
         FindIterable<Document> result = collection.find(query);
         
@@ -190,6 +223,9 @@ public class Conexion {
                 registro.setId(cont);
                 registro.setFecha(document.getString("Fecha"));
                 registro.setHora(document.getString("Hora"));
+                registro.setAforo(document.getInteger("Aforo"));
+                registro.setMovimiento(document.getString("Movimiento"));
+                
                 
                 registros.add(registro);
                 cont++;
@@ -213,7 +249,7 @@ public class Conexion {
         registros = new ArrayList<>();
         int cont = 1;
         
-        Document query = new Document("Mínimo aforo", true);
+        Document query = new Document("Aforo", 0);
         
         FindIterable<Document> regs = collection.find(query);
         
@@ -225,6 +261,77 @@ public class Conexion {
                 registro.setId(cont);
                 registro.setFecha(documento.getString("Fecha"));
                 registro.setHora(documento.getString("Hora"));
+                registro.setAforo(documento.getInteger("Aforo"));
+                registro.setMovimiento(documento.getString("Movimiento"));
+                
+                registros.add(registro);
+                cont++;
+            }
+        }
+        return registros;
+    }
+    
+    /**
+     * 
+     * @return
+     * 
+     * Registrará todas las entradas y salidas
+     */
+    public ArrayList<Registro> entryExit(){
+        collection = database.getCollection(COLLECTION);
+        registros = new ArrayList<>();
+        //Para el id mostrado en la tabla (no confundir con el de la DB)
+        int cont = 1;
+        
+        Document query = new Document ("Movimiento", new Document("$exists", true));
+        
+        FindIterable<Document> regs = collection.find(query);
+        
+        try(MongoCursor<Document> cursor = regs.iterator()){
+            while (cursor.hasNext()){
+                Document document = cursor.next();
+                Registro registro = new Registro();
+                Document documento = Document.parse(document.toJson());
+                registro.setId(cont);
+                registro.setFecha(documento.getString("Fecha"));
+                registro.setHora(documento.getString("Hora"));
+                registro.setAforo(documento.getInteger("Aforo"));
+                registro.setMovimiento(documento.getString("Movimiento"));
+                
+                registros.add(registro);
+                cont++;
+            }
+        }
+        return registros;
+    }
+    
+    public ArrayList<Registro> block(){
+        collection = database.getCollection(COLLECTION);
+        registros = new ArrayList<>();
+        int cont = 1;
+        
+        Bson filter = Filters.or(
+            Filters.exists("Estado Entrada 2", true),
+            Filters.exists("Estado Salida 2", true)
+        );
+        
+        FindIterable<Document> regs = collection.find(filter);
+        
+        try(MongoCursor<Document> cursor = regs.iterator()){
+            while (cursor.hasNext()){
+                Document document = cursor.next();
+                Registro registro = new Registro();
+                Document documento = Document.parse(document.toJson());
+                registro.setId(cont);
+                registro.setFecha(documento.getString("Fecha"));
+                registro.setHora(documento.getString("Hora"));
+                registro.setAforo(documento.getInteger("Aforo"));
+                
+                if (documento.containsKey("Estado Entrada 2")) {
+                    registro.setEstado(documento.getString("Estado Entrada 2"));
+                } else if (documento.containsKey("Estado Salida 2")) {
+                    registro.setEstado(documento.getString("Estado Salida 2"));
+                }
                 
                 registros.add(registro);
                 cont++;

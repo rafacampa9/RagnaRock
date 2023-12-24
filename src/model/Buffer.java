@@ -98,11 +98,11 @@ public class Buffer {
     
    
     public synchronized String stopExitAux(){
-        while(aforo <6){
+        if(aforo <6){
             try{
                 salidaBloqueada = true;
                 wait();
-                return "Salida 2 bloqueada\n";
+                return "Salida 2 cerrada\n";
 
             } catch (InterruptedException e){
                 e.printStackTrace();
@@ -116,11 +116,11 @@ public class Buffer {
     
     
     public synchronized String stopEntryAux(){
-        while(aforo >19){
+        if(aforo >19){
             try{
                 entradaBloqueada = true;
                 wait();
-                return "Entrada 2 bloqueada\n";
+                return "Entrada 2 cerrada\n";
 
             } catch (InterruptedException e){
                 e.printStackTrace();

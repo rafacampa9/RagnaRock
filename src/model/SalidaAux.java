@@ -17,7 +17,7 @@ public class SalidaAux extends Thread{
     private int dormir;
     private Buffer buffer;
     private Sala sala;
-    private boolean wait;
+    private boolean wait, block, free, changedBlock;
     private int cont;
     private DrawView paint;
 
@@ -61,6 +61,8 @@ public class SalidaAux extends Thread{
     public void run() {
         wait = false;
         cont = 0;
+        free = false;
+        block = false;
         
         while (true){
             sala.txtArea.setText(buffer.getDateNow() + ". " + buffer.stopExitAux() + sala.txtArea.getText());
@@ -79,12 +81,23 @@ public class SalidaAux extends Thread{
                 
                 // Si la salida no está bloqueada
                 if (!buffer.isSalidaBloqueada()){
+                    block = false;
+                    if (!free){
+                        sala.txtArea.setText(String.valueOf(bloqueo()));
+                        paint.txtArea.setText(String.valueOf(bloqueo()));
+                        changedBlock = true;
+                    } else{
+                        changedBlock=false;
+                    }
+                    free = true;
+                    
+                    
                     buffer.quit(1);
                     sala.txtAforo.setText(String.valueOf(buffer.get()));
                     paint.setAforo(buffer.get());
 
-                    sala.txtArea.setText(buffer.getDateNow() + ". Un cliente ha abandonado la sala por la Salida 2.\n" + sala.txtArea.getText());
-                    paint.txtArea.setText(buffer.getDateNow() + ". Un cliente ha abandonado la sala por la Salida 2.\n" + paint.txtArea.getText());
+                    sala.txtArea.setText(movimiento());
+                    paint.txtArea.setText(movimiento());
                     try{
                         sleep(dormir);
                     } catch (InterruptedException e){
@@ -93,11 +106,17 @@ public class SalidaAux extends Thread{
                     
                 // Si la salida está bloqueada, esperaremos un segundo para volver a comprobarlo    
                 } else {
-                    try{
-                        sleep(1000);
-                    } catch (InterruptedException e){
-                        e.printStackTrace();
+                    free = false;
+                    if (!block){
+                        sala.txtArea.setText(bloqueo());
+                        paint.txtArea.setText(bloqueo());
+                        changedBlock=true;
+                    } else{
+                        changedBlock=false;
                     }
+                    block = true;
+                    
+                    
                 }   
                 
 
@@ -108,4 +127,15 @@ public class SalidaAux extends Thread{
         }
     }
     
+    public String movimiento(){
+        return buffer.getDateNow() + ". Un cliente ha abandonado la sala por la Salida 2.\n" + sala.txtArea.getText();
+    }
+    
+    public String bloqueo(){
+        return buffer.getDateNow() + ". " + buffer.stopExitAux() + sala.txtArea.getText();
+    }
+    
+    public boolean isChangedBlock(){
+        return changedBlock;
+    }
 }

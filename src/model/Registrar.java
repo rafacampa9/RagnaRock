@@ -14,10 +14,19 @@ public class Registrar extends Thread{
     private Document documento;
     private Buffer buffer;
     private Conexion conn;
+    private Entrada entrada;
+    private Salida salida;
+    private EntradaAux entradaAux;
+    private SalidaAux salidaAux;
     
-    public Registrar(Buffer buffer, Conexion conn){
+    public Registrar(Buffer buffer, Conexion conn, Entrada entrada, 
+            Salida salida, EntradaAux entradaAux, SalidaAux salidaAux){
         this.buffer = buffer;
         this.conn = conn;
+        this.entrada = entrada;
+        this.salida = salida;
+        this.entradaAux = entradaAux;
+        this.salidaAux = salidaAux;
     }
     
     @Override
@@ -25,20 +34,12 @@ public class Registrar extends Thread{
         while(true){
             
             /**
-             * Si el aforo llega a 25, registramos
-             * que se ha llenado el aforo
+             * Para registrar los movimientos
              */
-            if (buffer.get() == 25){
-                registrar(true);   
-            }
-            
-            /**
-             * Si el aforo baja a 0, registramos
-             * que se ha vaciado el aforo
-             */
-            if (buffer.get() == 0){
-                registrar(false);   
-            }
+            registrar(entrada);
+            registrar(entradaAux);
+            registrar(salida);
+            registrar(salidaAux);
             
             /**
              * Para no repetir registros,
@@ -72,20 +73,37 @@ public class Registrar extends Thread{
      * Si minMax = true, nos registrará un pico máximo
      * Si minMax = false, nos registrará un pico mínimo
      */
-    public void registrar(Boolean minMax){
-        if (minMax){
-            documento = new Document("Fecha", buffer.getDateNow().substring(0, 10)).
+    public void registrar(Object objeto){
+        documento = new Document("Fecha", buffer.getDateNow().substring(0, 10)).
                 append("Hora", buffer.getDateNow().substring(12)).
-                append("Máximo aforo", true);
-            conn.insertarDatos(documento);
-           
-        }       
-        else{
-            documento = new Document("Fecha", buffer.getDateNow().substring(0, 10)).
-                append("Hora", buffer.getDateNow().substring(12)).
-                append("Mínimo aforo", true);
-            conn.insertarDatos(documento);
+                append("Aforo",buffer.get());
+        if (objeto instanceof Entrada){
+            System.out.println("Entrada1");
+            documento.append("Movimiento", entrada.movimiento().substring(22, 60));
         }
+        else if (objeto instanceof Salida ){
+            System.out.println("Salida1");
+            documento.append("Movimiento", salida.movimiento().substring(22, 70));
+            
+        }else if (objeto instanceof EntradaAux){
+            System.out.println("EntradaAux");
+            EntradaAux enter = (EntradaAux) objeto;
+            if (enter.isChangedBlock()){
+                documento.append("Estado Entrada 2", entradaAux.bloqueo().substring(20, 38));
+            } else {
+                documento.append("Movimiento", entradaAux.movimiento().substring(22,60));
+            }
+        }
+        else if (objeto instanceof SalidaAux){
+            System.out.println("SalidaAux");
+            SalidaAux exit = (SalidaAux) objeto;
+            if (exit.isChangedBlock())
+                documento.append("Estado Salida 2", salidaAux.bloqueo().substring(20,37));
+            else
+                documento.append("Movimiento", salidaAux.movimiento().substring(22, 70));
+        }      
+        conn.insertarDatos(documento);
+     
     }
     
     

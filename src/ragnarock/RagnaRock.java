@@ -8,10 +8,13 @@ import controller.Ctrl;
 
 import model.Buffer;
 import model.Conexion;
+import view.Bloqueos;
 import view.DrawView;
 
 
 import view.InicioSala;
+import view.Movimientos;
+import view.PanelConsultas;
 import view.PicosAforo;
 import view.Sala;
 
@@ -25,14 +28,19 @@ public class RagnaRock {
         InicioSala init = new InicioSala();
         init.setLocationRelativeTo(null);
         Sala sala = new Sala();
+        PanelConsultas panel = new PanelConsultas();
         PicosAforo picos = new PicosAforo();
+        Bloqueos block = new Bloqueos();
+        Movimientos mov = new Movimientos();
+        
         Buffer buff = new Buffer ();
         DrawView paint = new DrawView();
         Conexion conn = new Conexion();
         
         Ctrl ctrl = new Ctrl(buff, null, null, null,
                 null, init, sala,
-                paint, picos, conn);
+                paint, panel, picos, 
+                block, mov, conn);
         ctrl.iniciar();
         init.setVisible(true);
         
