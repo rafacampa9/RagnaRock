@@ -47,11 +47,11 @@ public class Bloqueos extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "FECHA", "HORA", "BLOQUEO"
+                "ID", "FECHA", "HORA", "AFORO", "BLOQUEO"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {

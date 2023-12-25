@@ -25,24 +25,28 @@ import view.Sala;
 public class RagnaRock {
 
     public static void main(String[] args) {
+
         InicioSala init = new InicioSala();
         init.setLocationRelativeTo(null);
-        Sala sala = new Sala();
+        
+        Conexion conn = new Conexion();
+        
+        Sala sala = new Sala(conn);
         PanelConsultas panel = new PanelConsultas();
         PicosAforo picos = new PicosAforo();
         Bloqueos block = new Bloqueos();
         Movimientos mov = new Movimientos();
         
         Buffer buff = new Buffer ();
-        DrawView paint = new DrawView();
-        Conexion conn = new Conexion();
+        DrawView paint = new DrawView(conn);
+        
         
         Ctrl ctrl = new Ctrl(buff, null, null, null,
                 null, init, sala,
                 paint, panel, picos, 
                 block, mov, conn);
         ctrl.iniciar();
-        init.setVisible(true);
+        
         
     }
     

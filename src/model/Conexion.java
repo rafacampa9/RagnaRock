@@ -11,6 +11,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Sorts;
 import java.util.ArrayList;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -169,10 +170,10 @@ public class Conexion {
      * este método al cerrar la aplicación
      */
     public void cerrarConexion() {
-        if (mongoClient != null) {
+        if (isConnected()) {
             mongoClient.close();
             System.out.println("Conexión cerrada correctamente.");
-        }
+        } 
     }
     
     
@@ -191,7 +192,23 @@ public class Conexion {
             System.out.println("Documento insertado correctamente");
         } catch (MongoException e){
             e.printStackTrace();
+        } 
+    }
+    
+    /**
+     * Para saber si estoy conectado
+     * a la BBDD
+     */
+    public boolean isConnected(){
+        if (mongoClient != null){
+            try{
+                mongoClient.listDatabaseNames();
+                return true;
+            }catch (MongoException e){
+                return false;
+            }   
         }
+        return false;
     }
     
     
@@ -211,16 +228,16 @@ public class Conexion {
         int cont = 1;
         Document query = new Document("Aforo", 25);
         
-        FindIterable<Document> result = collection.find(query);
+        FindIterable<Document> result = collection.find(query).sort(Sorts.descending("Hora"));
         
         try (MongoCursor<Document> cursor = result.iterator()){
             while(cursor.hasNext()){
                 Document document = cursor.next();
                 Registro registro = new Registro();
                 //System.out.println(document.toJson());
-                Document documento = Document.parse(document.toJson());
+                //Document documento = Document.parse(document.toJson());
                 
-                registro.setId(cont);
+                registro.setId(document.getObjectId("_id").toString());
                 registro.setFecha(document.getString("Fecha"));
                 registro.setHora(document.getString("Hora"));
                 registro.setAforo(document.getInteger("Aforo"));
@@ -247,25 +264,25 @@ public class Conexion {
     public ArrayList<Registro> picosMin(){
         collection = database.getCollection(COLLECTION);
         registros = new ArrayList<>();
-        int cont = 1;
+        //int cont = 1;
         
         Document query = new Document("Aforo", 0);
         
-        FindIterable<Document> regs = collection.find(query);
+        FindIterable<Document> regs = collection.find(query).sort(Sorts.descending("Hora"));
         
         try (MongoCursor<Document> cursor = regs.iterator()){
             while(cursor.hasNext()){
                 Document document = cursor.next();
                 Registro registro = new Registro();
-                Document documento = Document.parse(document.toJson());
-                registro.setId(cont);
-                registro.setFecha(documento.getString("Fecha"));
-                registro.setHora(documento.getString("Hora"));
-                registro.setAforo(documento.getInteger("Aforo"));
-                registro.setMovimiento(documento.getString("Movimiento"));
+                //Document documento = Document.parse(document.toJson());
+                registro.setId(document.getObjectId("_id").toString());
+                registro.setFecha(document.getString("Fecha"));
+                registro.setHora(document.getString("Hora"));
+                registro.setAforo(document.getInteger("Aforo"));
+                registro.setMovimiento(document.getString("Movimiento"));
                 
                 registros.add(registro);
-                cont++;
+                //cont++;
             }
         }
         return registros;
@@ -285,21 +302,21 @@ public class Conexion {
         
         Document query = new Document ("Movimiento", new Document("$exists", true));
         
-        FindIterable<Document> regs = collection.find(query);
+        FindIterable<Document> regs = collection.find(query).sort(Sorts.descending("Hora"));
         
         try(MongoCursor<Document> cursor = regs.iterator()){
             while (cursor.hasNext()){
                 Document document = cursor.next();
                 Registro registro = new Registro();
-                Document documento = Document.parse(document.toJson());
-                registro.setId(cont);
-                registro.setFecha(documento.getString("Fecha"));
-                registro.setHora(documento.getString("Hora"));
-                registro.setAforo(documento.getInteger("Aforo"));
-                registro.setMovimiento(documento.getString("Movimiento"));
+                //Document documento = Document.parse(document.toJson());
+                registro.setId(document.getObjectId("_id").toString());
+                registro.setFecha(document.getString("Fecha"));
+                registro.setHora(document.getString("Hora"));
+                registro.setAforo(document.getInteger("Aforo"));
+                registro.setMovimiento(document.getString("Movimiento"));
                 
                 registros.add(registro);
-                cont++;
+                
             }
         }
         return registros;
@@ -315,22 +332,22 @@ public class Conexion {
             Filters.exists("Estado Salida 2", true)
         );
         
-        FindIterable<Document> regs = collection.find(filter);
+        FindIterable<Document> regs = collection.find(filter).sort(Sorts.descending("Hora"));
         
         try(MongoCursor<Document> cursor = regs.iterator()){
             while (cursor.hasNext()){
                 Document document = cursor.next();
                 Registro registro = new Registro();
-                Document documento = Document.parse(document.toJson());
-                registro.setId(cont);
-                registro.setFecha(documento.getString("Fecha"));
-                registro.setHora(documento.getString("Hora"));
-                registro.setAforo(documento.getInteger("Aforo"));
+                //Document documento = Document.parse(document.toJson());
+                registro.setId(document.getObjectId("_id").toString());
+                registro.setFecha(document.getString("Fecha"));
+                registro.setHora(document.getString("Hora"));
+                registro.setAforo(document.getInteger("Aforo"));
                 
-                if (documento.containsKey("Estado Entrada 2")) {
-                    registro.setEstado(documento.getString("Estado Entrada 2"));
-                } else if (documento.containsKey("Estado Salida 2")) {
-                    registro.setEstado(documento.getString("Estado Salida 2"));
+                if (document.containsKey("Estado Entrada 2")) {
+                    registro.setEstado(document.getString("Estado Entrada 2"));
+                } else if (document.containsKey("Estado Salida 2")) {
+                    registro.setEstado(document.getString("Estado Salida 2"));
                 }
                 
                 registros.add(registro);

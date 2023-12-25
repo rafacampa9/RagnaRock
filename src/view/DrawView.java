@@ -9,25 +9,33 @@ import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JFrame;
 import javax.swing.Timer;
+import model.Conexion;
 
 /**
  *
  * @author rafacampa9
  */
-public class DrawView extends javax.swing.JFrame {
+public class DrawView extends javax.swing.JFrame{
     
     private int aforo;
     private Timer timer;
+    private Conexion conn;
 
     /**
      * Creates new form DrawView
      */
     
     public DrawView (){
+        initComponents();  
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+    
+    public DrawView(Conexion conn){
+        this.conn=conn;
         initComponents();
-        
-        
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
     public DrawView(int aforo) {
         initComponents();
@@ -241,4 +249,6 @@ public class DrawView extends javax.swing.JFrame {
     public javax.swing.JTextArea txtArea;
     public javax.swing.JTextField txtDateTime;
     // End of variables declaration//GEN-END:variables
+
+   
 }

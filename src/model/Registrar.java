@@ -89,7 +89,7 @@ public class Registrar extends Thread{
             System.out.println("EntradaAux");
             EntradaAux enter = (EntradaAux) objeto;
             if (enter.isChangedBlock()){
-                documento.append("Estado Entrada 2", entradaAux.bloqueo().substring(20, 38));
+                documento.append("Estado Entrada 2", entradaAux.bloqueo().substring(22, 39));
             } else {
                 documento.append("Movimiento", entradaAux.movimiento().substring(22,60));
             }
@@ -98,7 +98,7 @@ public class Registrar extends Thread{
             System.out.println("SalidaAux");
             SalidaAux exit = (SalidaAux) objeto;
             if (exit.isChangedBlock())
-                documento.append("Estado Salida 2", salidaAux.bloqueo().substring(20,37));
+                documento.append("Estado Salida 2", salidaAux.bloqueo().substring(22,38));
             else
                 documento.append("Movimiento", salidaAux.movimiento().substring(22, 70));
         }      

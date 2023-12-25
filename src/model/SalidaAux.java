@@ -18,7 +18,7 @@ public class SalidaAux extends Thread{
     private Buffer buffer;
     private Sala sala;
     private boolean wait, block, free, changedBlock;
-    private int cont;
+    private int cont, contBlock, contFree;
     private DrawView paint;
 
     public SalidaAux(int dormir, Buffer buffer, Sala sala, DrawView paint) {
@@ -60,7 +60,9 @@ public class SalidaAux extends Thread{
     @Override
     public void run() {
         wait = false;
-        cont = 0;
+        cont = 0; 
+        contBlock = 0; 
+        contFree = 1;
         free = false;
         block = false;
         
@@ -82,14 +84,16 @@ public class SalidaAux extends Thread{
                 // Si la salida no está bloqueada
                 if (!buffer.isSalidaBloqueada()){
                     block = false;
-                    if (!free){
+                    setChangedBlock(false);
+                    
+                    if (!free && contFree == 0){
                         sala.txtArea.setText(String.valueOf(bloqueo()));
                         paint.txtArea.setText(String.valueOf(bloqueo()));
-                        changedBlock = true;
-                    } else{
-                        changedBlock=false;
-                    }
+                        setChangedBlock(true);
+                    } 
                     free = true;
+                    contBlock = 0;
+                    contFree++;
                     
                     
                     buffer.quit(1);
@@ -107,13 +111,14 @@ public class SalidaAux extends Thread{
                 // Si la salida está bloqueada, esperaremos un segundo para volver a comprobarlo    
                 } else {
                     free = false;
-                    if (!block){
+                    setChangedBlock(false);
+                    if (!block && contBlock == 0){
                         sala.txtArea.setText(bloqueo());
                         paint.txtArea.setText(bloqueo());
-                        changedBlock=true;
-                    } else{
-                        changedBlock=false;
-                    }
+                        setChangedBlock(true);
+                    } 
+                    contBlock++;
+                    contFree = 0;
                     block = true;
                     
                     
@@ -137,5 +142,9 @@ public class SalidaAux extends Thread{
     
     public boolean isChangedBlock(){
         return changedBlock;
+    }
+    
+    public void setChangedBlock(boolean changedBlock){
+        this.changedBlock = changedBlock;
     }
 }

@@ -21,10 +21,20 @@ public class Buffer {
     private String dateNow;
     private boolean entradaBloqueada = false;
     private boolean salidaBloqueada = false;
-
+    private boolean pausa = false;
+    
+    
     public Buffer() {
     }
 
+    
+    
+    
+    public boolean isPausa(){
+        return pausa;
+    }
+    
+   
 
     /**
      * 
@@ -35,7 +45,11 @@ public class Buffer {
      * para que sepan si deben permanecer abiertas 
      * o por el contrario, bloquearse
      */
-    public synchronized boolean isEntradaBloqueada(){
+    public void setPausa(boolean pausa) {
+        this.pausa = pausa;
+    }
+
+    public synchronized boolean isEntradaBloqueada() {
         return entradaBloqueada;
     }
     
@@ -60,7 +74,7 @@ public class Buffer {
      * menor
      */
     public synchronized void put(int value)  {
-        while (aforo == 25){
+        while (aforo == 25 || pausa){
             try{
                 wait();
             } catch (InterruptedException e){
@@ -84,7 +98,7 @@ public class Buffer {
      * método hasta que el valor de aforo sea mayor
      */
     public synchronized void quit(int value){
-        while (aforo == 0){
+        while (aforo == 0 || pausa){
             try{
                 wait();
             } catch (InterruptedException e){
@@ -170,14 +184,18 @@ public class Buffer {
         while(true){
             try{
                 wait();
+                pausa = true;
             }catch (InterruptedException ex){
                 ex.printStackTrace();
             }
         }
+        
+        
     }
     
     public synchronized void reanudar(){
         while(true){
+            pausa = false;
             notifyAll();
         }
     }

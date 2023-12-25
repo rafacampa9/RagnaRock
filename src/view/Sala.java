@@ -4,17 +4,30 @@
  */
 package view;
 
+
+
+import javax.swing.JFrame;
+import model.Conexion;
+
 /**
  *
  * @author rafacampa9
  */
 public class Sala extends javax.swing.JFrame {
+    private Conexion conn;
 
     /**
      * Creates new form Sala
      */
-    public Sala() {
+    
+    public Sala(){
         initComponents();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+    public Sala(Conexion conn) {
+        this.conn = conn;
+        initComponents();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     /**
@@ -180,6 +193,7 @@ public class Sala extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                
                 new Sala().setVisible(true);
             }
         });
@@ -200,4 +214,6 @@ public class Sala extends javax.swing.JFrame {
     public javax.swing.JTextArea txtArea;
     public javax.swing.JTextField txtDateTime;
     // End of variables declaration//GEN-END:variables
+
+    
 }

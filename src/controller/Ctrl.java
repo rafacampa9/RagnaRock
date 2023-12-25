@@ -63,6 +63,7 @@ public class Ctrl extends WindowAdapter implements ActionListener{
     private ButtonGroup grupo;
     
     
+    
     public Ctrl(Buffer buffer, Entrada entrada1, EntradaAux entrada2, 
             Salida salida1, SalidaAux salida2, InicioSala init, Sala sala, 
             DrawView paint,  PanelConsultas panel,PicosAforo picos, 
@@ -83,6 +84,9 @@ public class Ctrl extends WindowAdapter implements ActionListener{
         
         this.sala.btnQuery.addActionListener(this);
         this.paint.btnQuery.addActionListener(this);
+        
+        this.sala.addWindowListener(this);
+        this.paint.addWindowListener(this);
         
         this.init.btnSend.addActionListener(this);
         this.init.txtEntrada1.addActionListener(this);
@@ -119,6 +123,27 @@ public class Ctrl extends WindowAdapter implements ActionListener{
         timer.setRepeats(true);
     }
     
+    /*
+    private void detenerHilos() {
+        entrada1.interrupt();
+        entrada2.interrupt();
+        salida1.interrupt();
+        salida2.interrupt();
+    }
+    
+    private void reiniciarAforo() {
+        buffer.resetAforo();
+    }
+    
+    private void cerrarSala() {
+        if (conn.isConnected()) {
+            conn.cerrarConexion();
+        }
+        detenerHilos();
+        reiniciarAforo();
+        sala.dispose();
+    }*/
+    
     /**
      * 
      * Al cerrar la ventana sala o paint,
@@ -134,24 +159,28 @@ public class Ctrl extends WindowAdapter implements ActionListener{
          * una consulta de la base de datos
          */
         if (picos.getFocusableWindowState())
-            picos.dispose();
+                picos.dispose();
         else if (mov.getFocusableWindowState())
-            mov.dispose();
+                mov.dispose();
         else if (block.getFocusableWindowState())
-            block.dispose();
-        conn.cerrarConexion();
+                block.dispose();
+            conn.cerrarConexion();
         
     }
-
+        
+            
     
     /**
      * Método que posteriormente utilizaremos
      * en la clase RagnaRock para iniciar la app
      */
     public void iniciar(){
-        init.setTitle("Controller");
-        init.setSize(404, 339);
+        
+        
+        init.setTitle("Inicio");
+        init.setLocationRelativeTo(null);
         init.setResizable(false);
+        init.setVisible(true);
     }
     
    
@@ -231,8 +260,16 @@ public class Ctrl extends WindowAdapter implements ActionListener{
     public void actionPerformed(ActionEvent e) {    
         
         int dormirEntrada1, dormirEntrada2, dormirSalida, dormirSalida2;
-        JTable table = mov.tbMov;
-        DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+        JTable tableMov = mov.tbMov, tableBlock = block.tbBlock, tableMax = picos.tableMax, tableMin = picos.tableMin;
+        DefaultTableModel tableModelBlock = (DefaultTableModel) tableBlock.getModel();
+        DefaultTableModel tableModelMov = (DefaultTableModel) tableMov.getModel();
+        DefaultTableModel tableModelMax = (DefaultTableModel) tableMax.getModel();
+        DefaultTableModel tableModelMin = (DefaultTableModel) tableMin.getModel();
+        
+        
+        
+        
+        
         /**
          * Si el botón pulsado es ENVIAR de 
          * la ventana init
@@ -294,7 +331,6 @@ public class Ctrl extends WindowAdapter implements ActionListener{
          */
         if (e.getSource()==sala.btnUpdate || e.getSource()==paint.btnUpdate){
             init.setLocation(20,50);
-            init.setResizable(false);
             init.setVisible(true);
             init.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
             
@@ -311,6 +347,7 @@ public class Ctrl extends WindowAdapter implements ActionListener{
             paint.setResizable(false);
             paint.setVisible(true);
             sala.setVisible(false);
+            
             
             startTimer();
         }
@@ -333,15 +370,20 @@ public class Ctrl extends WindowAdapter implements ActionListener{
          * sala o paint
          */
         if (e.getSource() == sala.btnQuery || e.getSource()==paint.btnQuery){
-            panel.setTitle("Consultas de aforo");
-            panel.setSize(478,300);
             panel.setLocation(700,300);
             panel.setVisible(true);
             panel.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         }
         
         if (e.getSource()==panel.rbMinMax){
-            DefaultTableModel tableMax = (DefaultTableModel) picos.tableMax.getModel();
+            TableColumn columnMax, columnMin;
+            
+            
+            TableColumnModel column  = tableMax.getColumnModel();
+            columnMax= column.getColumn(0);
+            columnMax.setPreferredWidth(190);
+            
+            
             ArrayList<Registro> picosMax = conn.picosMax();
             
             for (Registro picoMax: picosMax){
@@ -351,11 +393,13 @@ public class Ctrl extends WindowAdapter implements ActionListener{
                     picoMax.getHora()
                 };
                 
-                tableMax.addRow(rowMax);
+                tableModelMax.addRow(rowMax);
             }
             
             
-            DefaultTableModel tableMin = (DefaultTableModel) picos.tableMin.getModel();
+            column = tableMin.getColumnModel();
+            columnMin = column.getColumn(0);
+            columnMin.setPreferredWidth(190);
             ArrayList<Registro> picosMin = conn.picosMin();
             
             for (Registro picoMin: picosMin){
@@ -364,7 +408,7 @@ public class Ctrl extends WindowAdapter implements ActionListener{
                     picoMin.getFecha(),
                     picoMin.getHora()
                 };
-                tableMin.addRow(rowMin);
+                tableModelMin.addRow(rowMin);
             }
             
             picos.setVisible(true);
@@ -380,7 +424,11 @@ public class Ctrl extends WindowAdapter implements ActionListener{
             TableColumn columnMov;
             
             
-            TableColumnModel column  = table.getColumnModel();
+            TableColumnModel column  = tableMov.getColumnModel();
+            columnMov = column.getColumn(0);
+            columnMov.setPreferredWidth(190);
+            columnMov = column.getColumn(3);
+            columnMov.setPreferredWidth(50);
             columnMov = column.getColumn(4);
             columnMov.setPreferredWidth(350);
             
@@ -396,11 +444,11 @@ public class Ctrl extends WindowAdapter implements ActionListener{
                     movimiento.getMovimiento()
                 };
                 
-                tableModel.addRow(rowMov);
+                tableModelMov.addRow(rowMov);
             }
             
             mov.setTitle("Movimientos de aforo");
-            mov.setSize(784, 441);
+            mov.setSize(1154, 486);
             mov.setLocationRelativeTo(panel);
             mov.setVisible(true);
             mov.setResizable(false);            
@@ -410,7 +458,18 @@ public class Ctrl extends WindowAdapter implements ActionListener{
         
         
         if (e.getSource() == panel.rbBlock){
-            DefaultTableModel tabla = (DefaultTableModel) block.tbBlock.getModel();
+            TableColumn columnBlock;
+            
+            
+            TableColumnModel column  = tableBlock.getColumnModel();
+            columnBlock = column.getColumn(0);
+            columnBlock.setPreferredWidth(190);
+            columnBlock = column.getColumn(3);
+            columnBlock.setPreferredWidth(60);
+            columnBlock = column.getColumn(4);
+            columnBlock.setPreferredWidth(200);
+            
+
             ArrayList <Registro> bloqueos = conn.block();
             
             for (Registro bloqueo: bloqueos){
@@ -418,10 +477,11 @@ public class Ctrl extends WindowAdapter implements ActionListener{
                     bloqueo.getId(),
                     bloqueo.getFecha(),
                     bloqueo.getHora(),
+                    bloqueo.getAforo(),
                     bloqueo.getEstado()
                 };
                 
-                tabla.addRow(rowBlock);
+                tableModelBlock.addRow(rowBlock);
                 
             }
             block.setTitle("Bloqueos de Entrada/Salida");
@@ -482,6 +542,7 @@ public class Ctrl extends WindowAdapter implements ActionListener{
         sala.setResizable(false);
         sala.setVisible(true);
         sala.setSize(485, 435);
+
     }
     
    

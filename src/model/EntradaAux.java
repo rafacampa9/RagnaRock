@@ -18,7 +18,7 @@ public class EntradaAux extends Thread{
     private Sala sala;
     private DrawView paint;
     private boolean wait, block, free, changedBlock;
-    private int cont;
+    private int cont, contBlock, contFree;
             
 
 
@@ -60,6 +60,8 @@ public class EntradaAux extends Thread{
     public void run() {
         wait = false;
         cont = 0;
+        contBlock = 1;
+        contFree = 0;
         block = false;
         free = false;
         changedBlock = false;
@@ -77,19 +79,20 @@ public class EntradaAux extends Thread{
                 }
                 
                 /**
-                 * Si la entrada no está bloqueada
+                 * Si la entrada está abierta
                  */
                 if (!buffer.isEntradaBloqueada()){
                     block = false;
-                    if (!free){
+                    setChangedBlock(false);
+                    if (!free && contFree == 0){
                         sala.txtArea.setText(String.valueOf(bloqueo()));
                         paint.txtArea.setText(String.valueOf(bloqueo()));
                         setChangedBlock(true);
                                
-                    } else{
-                        setChangedBlock(false);
-                    }
+                    } 
                     free = true;
+                    contFree++;
+                    contBlock=0;
                     
                     buffer.put(1);
                     sala.txtAforo.setText(String.valueOf(buffer.get()));
@@ -110,13 +113,15 @@ public class EntradaAux extends Thread{
                  */
                 } else {
                     free = false;
-                    if (!block){
+                    if (!block && contBlock == 0){
                         sala.txtArea.setText(bloqueo());   
                         paint.txtArea.setText(bloqueo());
                         setChangedBlock(true);
                     } else{
                         setChangedBlock(false);
                     }
+                    contBlock++;
+                    contFree = 0;
                     block=true;
                     
                     /*

@@ -10,17 +10,17 @@ package model;
  */
 public class Registro {
     
-    private int id, aforo;
-    private String  fecha, hora, movimiento, estado;
+    private int aforo;
+    private String  id, fecha, hora, movimiento, estado;
 
     public Registro() {
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
