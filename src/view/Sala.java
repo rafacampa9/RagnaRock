@@ -88,6 +88,7 @@ public class Sala extends javax.swing.JFrame {
 
         btnQuery.setText("CONSULTAS AFORO");
 
+        txtArea.setEditable(false);
         txtArea.setColumns(20);
         txtArea.setRows(5);
         jScrollPane1.setViewportView(txtArea);

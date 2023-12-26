@@ -4,7 +4,9 @@
  */
 package model;
 
+import com.mongodb.MongoException;
 import static java.lang.Thread.sleep;
+import org.bson.Document;
 import view.DrawView;
 import view.Sala;
 
@@ -12,22 +14,24 @@ import view.Sala;
  *
  * @author rafacampa9
  */
-public class EntradaAux extends Thread{
+public class EntradaAux extends Thread implements Movimiento{
     private int dormir;
     private Buffer buffer;
     private Sala sala;
     private DrawView paint;
-    private boolean wait, block, free, changedBlock;
+    private boolean wait, block, free, changedBlock, mov;
     private int cont, contBlock, contFree;
+    private final int limiteAforo = 19;
+    private Conexion conn;
             
 
 
-    public EntradaAux(int dormir, Buffer buffer, Sala sala, DrawView paint) {
+    public EntradaAux(int dormir, Buffer buffer, Sala sala, DrawView paint, Conexion conn) {
         this.dormir = dormir;
         this.buffer = buffer;
         this.sala = sala;
         this.paint = paint;
-
+        this.conn = conn;
     }
 
     
@@ -39,6 +43,10 @@ public class EntradaAux extends Thread{
      * serán utilizados para modificar los parámetros
      * de frecuencia de salida
      */
+    public boolean isMov(){
+        return mov;
+    }
+    
     public int getDormir() {
         return dormir;
     }
@@ -58,81 +66,121 @@ public class EntradaAux extends Thread{
 
     @Override
     public void run() {
-        wait = false;
-        cont = 0;
-        contBlock = 1;
+   
+        cont = 0; 
+        mov = false;
+        contBlock = 1; 
         contFree = 0;
-        block = false;
         free = false;
-        changedBlock = false;
+        block = false;
+        
         while (true){
-            sala.txtArea.setText(buffer.getDateNow() + ". " + buffer.stopEntryAux() + sala.txtArea.getText());
-            paint.txtArea.setText(buffer.getDateNow() + ". " + buffer.stopEntryAux() + paint.txtArea.getText());
-             
-            if (wait){
-               buffer.pausar();
-               
-               cont = 1;
-            } else{
-                if (cont == 1){
-                    buffer.reanudar();
-                }
-                
-                /**
-                 * Si la entrada está abierta
-                 */
-                if (!buffer.isEntradaBloqueada()){
-                    block = false;
-                    setChangedBlock(false);
-                    if (!free && contFree == 0){
-                        sala.txtArea.setText(String.valueOf(bloqueo()));
-                        paint.txtArea.setText(String.valueOf(bloqueo()));
-                        setChangedBlock(true);
-                               
-                    } 
-                    free = true;
-                    contFree++;
-                    contBlock=0;
-                    
-                    buffer.put(1);
-                    sala.txtAforo.setText(String.valueOf(buffer.get()));
-                    paint.setAforo(buffer.get());
+            //wait = false;
+            buffer.stopEntryAux();
 
-                    sala.txtArea.setText(movimiento());
-                    paint.txtArea.setText(movimiento());
+            System.out.println("\n\n"+ buffer.get() + buffer.isEntradaBloqueada()+"\n\n");
+            while (buffer.get() > limiteAforo && buffer.isEntradaBloqueada()){
+
+                //wait = true;
+                mov = false;
+                
+                System.out.println("\n\nENTRADA BLOQUEADA\n\n");
+                cont++;
+                buffer.setEntradaBloqueada(false);
+                System.out.println("\nDESBLOQUEAMOS ENTRADA Y SUMAMOS CONTADOR\n\n");
+                
+            } 
+            
+             if(buffer.get() > limiteAforo){
+                System.out.println("\n\nAFORO MAYOR QUE 19\n\n");
+                
+                
+                free = false;
+                setChangedBlock(false);
+                if (!block && contBlock == 0){
+                    sala.txtArea.setText(bloqueo(buffer.stopEntryAux()));
+                    paint.txtArea.setText(bloqueo(buffer.stopEntryAux()));
+                    setChangedBlock(true);
+                    try{
+                        realizarBloqueo();
+                    }catch(MongoException e){
+                        e.printStackTrace();
+                    }
+                    System.out.println("\n\nMAYOR QUE 19 Y CONTBLOCK = 0\n\n");
                     try{
                         sleep(dormir);
-                    } catch (InterruptedException e) {
+                    } catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
+                } 
+                contBlock++;
+                 System.out.println("\n\ncontBlock:"+contBlock+"\n\n");
+                contFree = 0;
+                block = true;
+                try{
+                    System.out.println("\n\nSE DUERME\n\n");
+                    
+                    sleep(getDormir());
+                } catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+            
+            
+            } else{
+
+                //System.out.println("\n\nSALIDA ABIERTA\n\n" + cont);
+                
+                if (cont>0){
+
+                    //System.out.println("\nCONTADOR MAYOR QUE 0. IGUALAMOS A 0\n");
+                    cont = 0;
+                }
+                //System.out.println("\n\nREANUDA\n\n");
+                block = false;
+                setChangedBlock(false);
+                    
+                if (!free && contFree == 0){
+                        /*
+                        AQUÍ SE REALIZA LA INSERCIÓN
+                        */
+                    sala.txtArea.setText(String.valueOf(bloqueo(buffer.stopEntryAux())));
+                    paint.txtArea.setText(String.valueOf(bloqueo(buffer.stopEntryAux())));
+                    setChangedBlock(true);
+                    try{
+                        realizarBloqueo();
+                    }catch (MongoException e){
                         e.printStackTrace();
                     }
                     
-                /**
-                 * Si la entrada está bloqueada, 
-                 * esperaremos un segundo para
-                 * volver a comprobarlo
-                 */
-                } else {
-                    free = false;
-                    if (!block && contBlock == 0){
-                        sala.txtArea.setText(bloqueo());   
-                        paint.txtArea.setText(bloqueo());
-                        setChangedBlock(true);
-                    } else{
-                        setChangedBlock(false);
-                    }
-                    contBlock++;
-                    contFree = 0;
-                    block=true;
+                    //System.out.println("\n\nINSERTAMOS CAMBIO BLOQUEO\n\n");
                     
-                    /*
-                    try{   
-                        sleep(1000);
-                    } catch (InterruptedException e){
-                        e.printStackTrace();*/
+                } 
+                free = true;
+                contBlock = 0;
+                contFree++;
+                    
+                    
+                buffer.put(1);
+                try{
+                    realizarMovimiento();
+                } catch(MongoException e){
+                    e.printStackTrace();
                 }
-                
+                mov = true;
+                sala.txtAforo.setText(String.valueOf(buffer.get()));
+                paint.setAforo(buffer.get());
+
+                sala.txtArea.setText(movimiento());
+                paint.txtArea.setText(movimiento());
+
+                try{
+                    sleep(dormir);
+                } catch (InterruptedException e){
+                    e.printStackTrace();
+                }   
             }
-           
+            
+            
         }
 
     }
@@ -141,8 +189,8 @@ public class EntradaAux extends Thread{
         return buffer.getDateNow() + ". Ha entrado un cliente por la Entrada 2.\n" + sala.txtArea.getText();
     }
     
-    public String bloqueo(){
-        return buffer.getDateNow() + ". " + buffer.stopEntryAux() + sala.txtArea.getText();
+    public String bloqueo(String stopEntryResult){
+        return buffer.getDateNow() + ". " + stopEntryResult + sala.txtArea.getText();
     }
 
     public boolean isChangedBlock() {
@@ -151,6 +199,33 @@ public class EntradaAux extends Thread{
 
     public void setChangedBlock(boolean changedBlock) {
         this.changedBlock = changedBlock;
+    }
+
+    @Override
+    public void realizarMovimiento() {
+        if (this.isMov()) {
+            Document documento = new Document("Fecha", buffer.getDateNow().substring(0, 10)).
+                    append("Hora", buffer.getDateNow().substring(12)).
+                    append("Aforo", buffer.get());
+
+            documento.append("Movimiento", "Ha entrado un cliente por la Entrada 2");
+            System.out.println("\n\nINSERTADO DOC MOVIMIENTO ENTRADA 2\n\n");
+
+            conn.insertarDatos(documento);
+        }
+    }
+    
+    public void realizarBloqueo(){
+        if (!this.mov){
+            Document documento = new Document("Fecha", buffer.getDateNow().substring(0, 10)).
+                    append("Hora", buffer.getDateNow().substring(12)).
+                    append("Aforo", buffer.get());
+
+            documento.append("Estado Entrada 2", buffer.stopEntryAux());
+            System.out.println("\n\nINSERTADO DOC MOVIMIENTO ENTRADA 2\n\n");
+
+            conn.insertarDatos(documento);
+        }
     }
     
     

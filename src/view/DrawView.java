@@ -123,6 +123,7 @@ public class DrawView extends javax.swing.JFrame{
         btnQuery.setText("CONSULTAS AFORO");
         jPanel3.add(btnQuery, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 380, 150, -1));
 
+        txtArea.setEditable(false);
         txtArea.setColumns(20);
         txtArea.setRows(5);
         jScrollPane1.setViewportView(txtArea);

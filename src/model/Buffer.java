@@ -49,11 +49,17 @@ public class Buffer {
         this.pausa = pausa;
     }
 
+    
+    public synchronized void setEntradaBloqueada(boolean entradaBloqueada){
+        this.entradaBloqueada = entradaBloqueada;
+    }
     public synchronized boolean isEntradaBloqueada() {
         return entradaBloqueada;
     }
     
-    
+    public synchronized void setSalidaBloqueada(boolean salidaBloqueada){
+        this.salidaBloqueada = salidaBloqueada;
+    }
     public synchronized boolean isSalidaBloqueada(){
         return salidaBloqueada;
     }
@@ -83,7 +89,7 @@ public class Buffer {
         }
         notify();
         aforo += value;
-        System.out.println("Aforo actual: " + aforo);
+        //System.out.println("Aforo actual: " + aforo);
         
     }
 
@@ -107,7 +113,7 @@ public class Buffer {
         }
         notify();
         aforo -= value;
-        System.out.println("Aforo actual: " + aforo);
+        //System.out.println("Aforo actual: " + aforo);
     }
     
    
@@ -130,7 +136,7 @@ public class Buffer {
     
     
     public synchronized String stopEntryAux(){
-        if(aforo >19){
+        if(aforo > 19){
             try{
                 entradaBloqueada = true;
                 wait();
@@ -183,8 +189,9 @@ public class Buffer {
     public synchronized void pausar(){
         while(true){
             try{
-                wait();
                 pausa = true;
+                wait();
+                
             }catch (InterruptedException ex){
                 ex.printStackTrace();
             }

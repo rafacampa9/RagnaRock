@@ -4,7 +4,9 @@
  */
 package model;
 
+import com.mongodb.MongoException;
 import static java.lang.Thread.sleep;
+import org.bson.Document;
 import view.DrawView;
 import view.Sala;
 
@@ -12,23 +14,32 @@ import view.Sala;
  *
  * @author rafacampa9
  */
-public class SalidaAux extends Thread{
+public class SalidaAux extends Thread implements Movimiento{
     
     private int dormir;
     private Buffer buffer;
+    //private Document documento;
     private Sala sala;
-    private boolean wait, block, free, changedBlock;
+    private boolean wait, block, free, changedBlock, mov;
     private int cont, contBlock, contFree;
     private DrawView paint;
+    private final int  limiteAforo = 6;
+    private Conexion conn;
 
-    public SalidaAux(int dormir, Buffer buffer, Sala sala, DrawView paint) {
+    public SalidaAux(int dormir, Buffer buffer, Sala sala, DrawView paint, Conexion conn) {
         this.dormir = dormir;
         this.buffer = buffer;
         this.sala = sala;
         this.paint = paint;
+        this.conn = conn;
     }
     
-    
+    public Document addDocument(boolean b){
+        if (b)
+            return new Document ("Estado Salida 2", buffer.stopExitAux());
+        else
+            return null;
+    }
     
     /**
      * 
@@ -38,7 +49,9 @@ public class SalidaAux extends Thread{
      * serán utilizados para modificar los parámetros
      * de frecuencia de salida
      */
-    
+    public boolean isMov(){
+        return mov;
+    }
     
     public int getDormir() {
         return dormir;
@@ -59,7 +72,7 @@ public class SalidaAux extends Thread{
 
     @Override
     public void run() {
-        wait = false;
+
         cont = 0; 
         contBlock = 0; 
         contFree = 1;
@@ -67,68 +80,92 @@ public class SalidaAux extends Thread{
         block = false;
         
         while (true){
-            sala.txtArea.setText(buffer.getDateNow() + ". " + buffer.stopExitAux() + sala.txtArea.getText());
-            paint.txtArea.setText(buffer.getDateNow() + ". " + buffer.stopExitAux() + paint.txtArea.getText());
-            
-            
-            if (wait){
-                buffer.pausar();
-                cont=1;
-                
-            } else{
-                
-                if (cont == 1){
-                    buffer.reanudar();
-                }
-                
-                // Si la salida no está bloqueada
-                if (!buffer.isSalidaBloqueada()){
-                    block = false;
-                    setChangedBlock(false);
-                    
-                    if (!free && contFree == 0){
-                        sala.txtArea.setText(String.valueOf(bloqueo()));
-                        paint.txtArea.setText(String.valueOf(bloqueo()));
-                        setChangedBlock(true);
-                    } 
-                    free = true;
-                    contBlock = 0;
-                    contFree++;
-                    
-                    
-                    buffer.quit(1);
-                    sala.txtAforo.setText(String.valueOf(buffer.get()));
-                    paint.setAforo(buffer.get());
 
-                    sala.txtArea.setText(movimiento());
-                    paint.txtArea.setText(movimiento());
+            buffer.stopExitAux();
+            System.out.println("\n\n"+ buffer.get() + buffer.isSalidaBloqueada()+"\n\n");
+            while (buffer.get() < limiteAforo && buffer.isSalidaBloqueada()){
+
+                wait = true;
+                mov = false;
+
+                cont++;
+                buffer.setSalidaBloqueada(false);
+
+                
+            } 
+            
+             if(buffer.get() < limiteAforo){
+
+                free = false;
+                setChangedBlock(false);
+                if (!block && contBlock == 0){
+                    sala.txtArea.setText(bloqueo(buffer.stopExitAux()));
+                    paint.txtArea.setText(bloqueo(buffer.stopExitAux()));
+                    setChangedBlock(true);
+                    realizarBloqueo();
+
                     try{
                         sleep(dormir);
                     } catch (InterruptedException e){
                         e.printStackTrace();
                     }
-                    
-                // Si la salida está bloqueada, esperaremos un segundo para volver a comprobarlo    
-                } else {
-                    free = false;
-                    setChangedBlock(false);
-                    if (!block && contBlock == 0){
-                        sala.txtArea.setText(bloqueo());
-                        paint.txtArea.setText(bloqueo());
-                        setChangedBlock(true);
-                    } 
-                    contBlock++;
-                    contFree = 0;
-                    block = true;
-                    
-                    
-                }   
-                
+                } 
+                contBlock++;
+                contFree = 0;
+                wait = true;
+                block = true;
+                try{
+                    sleep(getDormir());
+                } catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+            
+            
+            } else{
 
+                if (cont>0){
+
+                    cont = 0;
+                }
+
+                block = false;
+                setChangedBlock(false);
+                    
+                if (!free && contFree == 0){
+                        /*
+                        AQUÍ SE REALIZA LA INSERCIÓN
+                        */
+                    sala.txtArea.setText(String.valueOf(bloqueo(buffer.stopExitAux())));
+                    paint.txtArea.setText(String.valueOf(bloqueo(buffer.stopExitAux())));
+                    setChangedBlock(true);
+                    realizarBloqueo();
+
+                    
+                } 
+                free = true;
+                contBlock = 0;
+                contFree++;
+                wait = false;    
+                    
+                buffer.quit(1);
+                mov = true;
+                realizarMovimiento();
+
+                sala.txtAforo.setText(String.valueOf(buffer.get()));
+                paint.setAforo(buffer.get());
+
+                sala.txtArea.setText(movimiento());
+                paint.txtArea.setText(movimiento());
+
+                try{
                 
+                    sleep(dormir);
+                } catch (InterruptedException e){
+                    e.printStackTrace();
+                }   
             }
             
-
+            
         }
     }
     
@@ -136,8 +173,8 @@ public class SalidaAux extends Thread{
         return buffer.getDateNow() + ". Un cliente ha abandonado la sala por la Salida 2.\n" + sala.txtArea.getText();
     }
     
-    public String bloqueo(){
-        return buffer.getDateNow() + ". " + buffer.stopExitAux() + sala.txtArea.getText();
+    public String bloqueo(String stopExitResult){
+        return buffer.getDateNow() + ". " + stopExitResult + sala.txtArea.getText();
     }
     
     public boolean isChangedBlock(){
@@ -146,5 +183,32 @@ public class SalidaAux extends Thread{
     
     public void setChangedBlock(boolean changedBlock){
         this.changedBlock = changedBlock;
+    }
+    
+    @Override
+    public void realizarMovimiento() {
+        if (this.isMov()) {
+            Document documento = new Document("Fecha", buffer.getDateNow().substring(0, 10)).
+                    append("Hora", buffer.getDateNow().substring(12)).
+                    append("Aforo", buffer.get());
+
+            documento.append("Movimiento", "Ha abandonado un cliente por la Salida 2");
+            System.out.println("\n\nINSERTADO DOC MOVIMIENTO SALIDA 2\n\n");
+
+            conn.insertarDatos(documento);
+        }
+    }
+    
+    public void realizarBloqueo(){
+        if (!this.mov){
+            Document documento = new Document("Fecha", buffer.getDateNow().substring(0, 10)).
+                    append("Hora", buffer.getDateNow().substring(12)).
+                    append("Aforo", buffer.get());
+
+            documento.append("Estado Salida 2", buffer.stopExitAux());
+            System.out.println("\n\nINSERTADO DOC MOVIMIENTO SALIDA 2\n\n");
+
+            conn.insertarDatos(documento);
+        }
     }
 }

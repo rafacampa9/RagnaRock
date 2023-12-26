@@ -297,8 +297,7 @@ public class Conexion {
     public ArrayList<Registro> entryExit(){
         collection = database.getCollection(COLLECTION);
         registros = new ArrayList<>();
-        //Para el id mostrado en la tabla (no confundir con el de la DB)
-        int cont = 1;
+        
         
         Document query = new Document ("Movimiento", new Document("$exists", true));
         

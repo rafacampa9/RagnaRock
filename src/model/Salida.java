@@ -4,6 +4,8 @@
  */
 package model;
 
+import com.mongodb.MongoException;
+import org.bson.Document;
 import view.DrawView;
 import view.Sala;
 
@@ -12,19 +14,22 @@ import view.Sala;
  * @author rafacampa9
  */
 
-public class Salida extends Thread{
+public class Salida extends Thread implements Movimiento{
     private int dormir;
     private Buffer buffer;
     private Sala sala;
-    private boolean wait;
+    private boolean wait, mov;
     private int cont;
+    private Conexion conn;
     private DrawView paint;
+    private Document documento;
 
-    public Salida(int dormir, Buffer buffer, Sala sala, DrawView paint) {
+    public Salida(int dormir, Buffer buffer, Sala sala, DrawView paint, Conexion conn) {
         this.dormir = dormir;
         this.buffer = buffer;
         this.sala = sala;
         this.paint = paint;
+        this.conn = conn;
     }
     
     
@@ -37,7 +42,9 @@ public class Salida extends Thread{
      * serán utilizados para modificar los parámetros
      * de frecuencia de salida
      */
-    
+    public boolean isMov(){
+        return mov;
+    }
     
     public int getDormir() {
         return dormir;
@@ -59,18 +66,26 @@ public class Salida extends Thread{
     @Override
     public void run() {
         wait = false;
+        mov = false;
         cont = 0;
         
         while (true){
             if (wait){
                 buffer.pausar();
                 cont=1;
+                mov = false;
                 
             } else{
                 if (cont == 1){
                     buffer.reanudar();
                 }
                 buffer.quit(1);
+                mov = true;
+                try{
+                    realizarMovimiento();
+                }catch(MongoException e){
+                    e.printStackTrace();
+                }
                 try{
                     sleep(dormir);
                 } catch (InterruptedException e){
@@ -91,5 +106,20 @@ public class Salida extends Thread{
     public String movimiento(){
         return buffer.getDateNow() + ". Un cliente ha abandonado la sala por la Salida 1.\n" + sala.txtArea.getText();
     }
+
+    @Override
+    public void realizarMovimiento() {
+        if (this.isMov()) {
+            Document documento = new Document("Fecha", buffer.getDateNow().substring(0, 10)).
+                    append("Hora", buffer.getDateNow().substring(12)).
+                    append("Aforo", buffer.get());
+
+            documento.append("Movimiento", "Ha abandonado un cliente por la Salida 1");
+            System.out.println("\n\nINSERTADO DOC MOVIMIENTO SALIDA 1\n\n");
+
+            conn.insertarDatos(documento);
+        }
+    }
+
 }
 

@@ -24,7 +24,7 @@ import model.Conexion;
 import model.DateNow;
 import model.Entrada;
 import model.EntradaAux;
-import model.Registrar;
+
 import model.Registro;
 import model.Salida;
 import model.SalidaAux;
@@ -54,7 +54,7 @@ public class Ctrl extends WindowAdapter implements ActionListener{
     private int cont;
     private final Timer timer;
     private Conexion conn;
-    private Registrar reg;
+//    private Registrar reg;
     private MongoCollection <Document> collection;
     private final PicosAforo picos;
     private final Bloqueos block;
@@ -123,26 +123,7 @@ public class Ctrl extends WindowAdapter implements ActionListener{
         timer.setRepeats(true);
     }
     
-    /*
-    private void detenerHilos() {
-        entrada1.interrupt();
-        entrada2.interrupt();
-        salida1.interrupt();
-        salida2.interrupt();
-    }
-    
-    private void reiniciarAforo() {
-        buffer.resetAforo();
-    }
-    
-    private void cerrarSala() {
-        if (conn.isConnected()) {
-            conn.cerrarConexion();
-        }
-        detenerHilos();
-        reiniciarAforo();
-        sala.dispose();
-    }*/
+   
     
     /**
      * 
@@ -158,13 +139,52 @@ public class Ctrl extends WindowAdapter implements ActionListener{
          * ventanas que nos está devolviendo
          * una consulta de la base de datos
          */
-        if (picos.getFocusableWindowState())
-                picos.dispose();
-        else if (mov.getFocusableWindowState())
-                mov.dispose();
-        else if (block.getFocusableWindowState())
-                block.dispose();
-            conn.cerrarConexion();
+        
+        
+        if (picos.getFocusableWindowState()){
+            
+            try{
+                Thread.sleep(5);
+            } catch (InterruptedException ex){
+                ex.printStackTrace();
+            }
+            picos.dispose();
+        
+        }else if (mov.getFocusableWindowState()){
+            
+            try{
+                Thread.sleep(5);
+            }catch (InterruptedException ex){
+                ex.printStackTrace();
+            }
+            
+            mov.dispose();
+        }
+            
+        else if (block.getFocusableWindowState()){
+            
+            try{
+                Thread.sleep(5);
+                
+            } catch (InterruptedException ex){
+                ex.printStackTrace();
+            }
+            block.dispose();
+        }
+        try{
+            Thread.sleep(5);
+        } catch (InterruptedException ex){
+            ex.printStackTrace();
+        }
+            
+        try{
+            Thread.sleep(5);
+        } catch(InterruptedException ex){
+            ex.printStackTrace();
+        }
+        
+        conn.cerrarConexion();
+        
         
     }
         
@@ -206,19 +226,19 @@ public class Ctrl extends WindowAdapter implements ActionListener{
             conn = new Conexion(collection);
             conn.conectar();
             buffer = new Buffer();
-            entrada1 = new Entrada(dormir_entrada1, buffer, sala, paint);
-            entrada2 = new EntradaAux(dormir_entrada2, buffer, sala, paint);
-            salida1 = new Salida(dormir_salida1, buffer, sala, paint);
-            salida2 = new SalidaAux (dormir_salida2, buffer, sala, paint);
+            entrada1 = new Entrada(dormir_entrada1, buffer, sala, paint, conn);
+            entrada2 = new EntradaAux(dormir_entrada2, buffer, sala, paint, conn);
+            salida1 = new Salida(dormir_salida1, buffer, sala, paint, conn);
+            salida2 = new SalidaAux (dormir_salida2, buffer, sala, paint, conn);
             dateNow = new DateNow(buffer, sala, paint);
-            reg = new Registrar(buffer, conn, entrada1, salida1, entrada2, salida2);
+            //reg = new Registrar(buffer, conn, entrada1, salida1, entrada2, salida2);
                
             entrada1.start();
             entrada2.start();
             salida1.start();
             salida2.start();
             dateNow.start();
-            reg.start();
+            //reg.start();
             cont = 1;
             
             
@@ -376,6 +396,8 @@ public class Ctrl extends WindowAdapter implements ActionListener{
         }
         
         if (e.getSource()==panel.rbMinMax){
+            tableModelMax.setRowCount(0);
+            tableModelMin.setRowCount(0);
             TableColumn columnMax, columnMin;
             
             
@@ -421,6 +443,7 @@ public class Ctrl extends WindowAdapter implements ActionListener{
         
         
         if (e.getSource()==panel.rbMov){
+            tableModelMov.setRowCount(0);
             TableColumn columnMov;
             
             
@@ -458,6 +481,7 @@ public class Ctrl extends WindowAdapter implements ActionListener{
         
         
         if (e.getSource() == panel.rbBlock){
+            tableModelBlock.setRowCount(0);
             TableColumn columnBlock;
             
             
