@@ -6,6 +6,7 @@ package controller;
 
 
 import com.mongodb.client.MongoCollection;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -17,6 +18,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.Timer;
+import javax.swing.border.BevelBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -428,12 +430,18 @@ public class Ctrl extends WindowAdapter implements ActionListener{
             
             ImageIcon pause = new ImageIcon(System.getProperty("user.dir")+ "/img/pause.png");
             paint.btnPause.setIcon(pause);
+            paint.btnPause.setBackground (Color.white);
+            paint.btnPause.setBorder(new BevelBorder(BevelBorder.RAISED));
             
             ImageIcon stop = new ImageIcon(System.getProperty("user.dir") + "/img/stop.png");
             paint.btnStop.setIcon(stop);
+            paint.btnStop.setBackground (Color.white);
+            paint.btnStop.setBorder(new BevelBorder(BevelBorder.RAISED));
             
             ImageIcon play = new ImageIcon (System.getProperty("user.dir") + "/img/play.png");
             paint.btnRestart.setIcon(play);
+            paint.btnRestart.setBackground (Color.white);
+            paint.btnRestart.setBorder(new BevelBorder(BevelBorder.RAISED));
             
             sala.setVisible(false);
             
@@ -638,12 +646,18 @@ public class Ctrl extends WindowAdapter implements ActionListener{
         
         ImageIcon pause = new ImageIcon (System.getProperty("user.dir") + "/img/pause.png");
         sala.btnPause.setIcon(pause);
+        sala.btnPause.setBackground (Color.white);
+        sala.btnPause.setBorder(new BevelBorder(BevelBorder.RAISED));
         
         ImageIcon stop = new ImageIcon (System.getProperty("user.dir") + "/img/stop.png");
         sala.btnStop.setIcon(stop);
+        sala.btnStop.setBackground (Color.white);
+        sala.btnStop.setBorder(new BevelBorder(BevelBorder.RAISED));
         
         ImageIcon play = new ImageIcon (System.getProperty("user.dir") + "/img/play.png");
         sala.btnRestart.setIcon(play);
+        sala.btnRestart.setBackground (Color.white);
+        sala.btnRestart.setBorder(new BevelBorder(BevelBorder.RAISED));
 
     }
     

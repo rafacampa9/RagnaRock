@@ -120,6 +120,6 @@ public class Salida extends Thread implements Movimiento{
             conn.insertarDatos(documento);
         }
     }
-
+    
 }
 

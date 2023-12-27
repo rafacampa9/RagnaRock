@@ -82,8 +82,7 @@ public class EntradaAux extends Thread implements Movimiento{
             while (buffer.get() > limiteAforo && buffer.isEntradaBloqueada()){
 
                 //wait = true;
-                mov = false;
-                
+                mov = false; 
                 //System.out.println("\n\nENTRADA BLOQUEADA\n\n");
                 cont++;
                 buffer.setEntradaBloqueada(false);
@@ -161,11 +160,9 @@ public class EntradaAux extends Thread implements Movimiento{
                     
                     
                 buffer.put(1);
-                try{
-                    realizarMovimiento();
-                } catch(MongoException e){
-                    e.printStackTrace();
-                }
+                
+                realizarMovimiento();
+                
                 mov = true;
                 sala.txtAforo.setText(String.valueOf(buffer.get()));
                 paint.setAforo(buffer.get());
