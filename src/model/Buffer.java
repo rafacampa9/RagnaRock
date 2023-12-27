@@ -64,6 +64,10 @@ public class Buffer {
         return salidaBloqueada;
     }
     
+    public synchronized void setAforo(int aforo){
+        this.aforo = aforo;
+    }
+    
     
     
     /**
@@ -187,24 +191,24 @@ public class Buffer {
      * pausar() y reanudar()
      */
     public synchronized void pausar(){
-        while(true){
-            try{
+        //while(true){
+        try{
                 pausa = true;
                 wait();
                 
             }catch (InterruptedException ex){
                 ex.printStackTrace();
             }
-        }
+        //}
         
         
     }
     
     public synchronized void reanudar(){
-        while(true){
-            pausa = false;
-            notifyAll();
-        }
+
+        pausa = false;
+        notifyAll();
+        
     }
    
 }

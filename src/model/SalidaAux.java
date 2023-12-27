@@ -82,7 +82,7 @@ public class SalidaAux extends Thread implements Movimiento{
         while (true){
 
             buffer.stopExitAux();
-            System.out.println("\n\n"+ buffer.get() + buffer.isSalidaBloqueada()+"\n\n");
+            //System.out.println("\n\n"+ buffer.get() + buffer.isSalidaBloqueada()+"\n\n");
             while (buffer.get() < limiteAforo && buffer.isSalidaBloqueada()){
 
                 wait = true;
@@ -193,7 +193,7 @@ public class SalidaAux extends Thread implements Movimiento{
                     append("Aforo", buffer.get());
 
             documento.append("Movimiento", "Ha abandonado un cliente por la Salida 2");
-            System.out.println("\n\nINSERTADO DOC MOVIMIENTO SALIDA 2\n\n");
+            //System.out.println("\n\nINSERTADO DOC MOVIMIENTO SALIDA 2\n\n");
 
             conn.insertarDatos(documento);
         }
@@ -206,7 +206,7 @@ public class SalidaAux extends Thread implements Movimiento{
                     append("Aforo", buffer.get());
 
             documento.append("Estado Salida 2", buffer.stopExitAux());
-            System.out.println("\n\nINSERTADO DOC MOVIMIENTO SALIDA 2\n\n");
+            //System.out.println("\n\nINSERTADO DOC MOVIMIENTO SALIDA 2\n\n");
 
             conn.insertarDatos(documento);
         }

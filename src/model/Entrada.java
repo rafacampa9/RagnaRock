@@ -97,7 +97,7 @@ public class Entrada extends Thread implements Movimiento{
                 sala.txtArea.setText(movimiento());
                 paint.txtArea.setText(movimiento());
             }
-           
+            
         }
 
     }
@@ -105,7 +105,7 @@ public class Entrada extends Thread implements Movimiento{
     public String movimiento(){
         return buffer.getDateNow() + ". Ha entrado un cliente por la Entrada 1.\n" + sala.txtArea.getText();
     }
-
+    
     @Override
     public void realizarMovimiento() {
         if (this.isMov()) {
@@ -114,7 +114,7 @@ public class Entrada extends Thread implements Movimiento{
                     append("Aforo", buffer.get());
 
             documento.append("Movimiento", "Ha entrado un cliente por la Entrada 1");
-            System.out.println("\n\nINSERTADO DOC MOVIMIENTO ENTRADA 1\n\n");
+            //System.out.println("\n\nINSERTADO DOC MOVIMIENTO ENTRADA 1\n\n");
 
             conn.insertarDatos(documento);
         }

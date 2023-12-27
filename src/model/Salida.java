@@ -115,7 +115,7 @@ public class Salida extends Thread implements Movimiento{
                     append("Aforo", buffer.get());
 
             documento.append("Movimiento", "Ha abandonado un cliente por la Salida 1");
-            System.out.println("\n\nINSERTADO DOC MOVIMIENTO SALIDA 1\n\n");
+            //System.out.println("\n\nINSERTADO DOC MOVIMIENTO SALIDA 1\n\n");
 
             conn.insertarDatos(documento);
         }

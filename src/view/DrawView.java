@@ -80,6 +80,9 @@ public class DrawView extends javax.swing.JFrame{
         btnQuery = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtArea = new javax.swing.JTextArea();
+        btnStop = new javax.swing.JButton();
+        btnPause = new javax.swing.JButton();
+        btnRestart = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -106,10 +109,10 @@ public class DrawView extends javax.swing.JFrame{
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnUpdate.setText("MODIFICAR");
-        jPanel3.add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 380, -1, -1));
+        jPanel3.add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, -1, -1));
 
         btnChange.setText("CAMBIAR VISTA");
-        jPanel3.add(btnChange, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 380, -1, -1));
+        jPanel3.add(btnChange, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 360, -1, -1));
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Fecha y hora actual:");
@@ -121,28 +124,43 @@ public class DrawView extends javax.swing.JFrame{
         jPanel3.add(txtDateTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 0, 250, 20));
 
         btnQuery.setText("CONSULTAS AFORO");
-        jPanel3.add(btnQuery, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 380, 150, -1));
+        jPanel3.add(btnQuery, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 360, 150, -1));
 
         txtArea.setEditable(false);
         txtArea.setColumns(20);
         txtArea.setRows(5);
         jScrollPane1.setViewportView(txtArea);
 
-        jPanel3.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 430, 430, 100));
+        jPanel3.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 400, 430, 100));
+
+        btnStop.setMaximumSize(new java.awt.Dimension(57, 40));
+        btnStop.setMinimumSize(new java.awt.Dimension(57, 40));
+        btnStop.setPreferredSize(new java.awt.Dimension(57, 40));
+        jPanel3.add(btnStop, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 520, 70, 50));
+
+        btnPause.setMaximumSize(new java.awt.Dimension(57, 40));
+        btnPause.setMinimumSize(new java.awt.Dimension(57, 40));
+        btnPause.setPreferredSize(new java.awt.Dimension(57, 40));
+        jPanel3.add(btnPause, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 520, 80, 50));
+
+        btnRestart.setMaximumSize(new java.awt.Dimension(57, 40));
+        btnRestart.setMinimumSize(new java.awt.Dimension(57, 40));
+        btnRestart.setPreferredSize(new java.awt.Dimension(57, 40));
+        jPanel3.add(btnRestart, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 520, 80, 50));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -239,7 +257,10 @@ public class DrawView extends javax.swing.JFrame{
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnChange;
+    public javax.swing.JButton btnPause;
     public javax.swing.JButton btnQuery;
+    public javax.swing.JButton btnRestart;
+    public javax.swing.JButton btnStop;
     public javax.swing.JButton btnUpdate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

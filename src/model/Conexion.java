@@ -228,7 +228,7 @@ public class Conexion {
         int cont = 1;
         Document query = new Document("Aforo", 25);
         
-        FindIterable<Document> result = collection.find(query).sort(Sorts.descending("Hora"));
+        FindIterable<Document> result = collection.find(query).sort(Sorts.descending("Fecha", "Hora"));
         
         try (MongoCursor<Document> cursor = result.iterator()){
             while(cursor.hasNext()){
@@ -268,7 +268,7 @@ public class Conexion {
         
         Document query = new Document("Aforo", 0);
         
-        FindIterable<Document> regs = collection.find(query).sort(Sorts.descending("Hora"));
+        FindIterable<Document> regs = collection.find(query).sort(Sorts.descending("Fecha","Hora"));
         
         try (MongoCursor<Document> cursor = regs.iterator()){
             while(cursor.hasNext()){
@@ -301,7 +301,7 @@ public class Conexion {
         
         Document query = new Document ("Movimiento", new Document("$exists", true));
         
-        FindIterable<Document> regs = collection.find(query).sort(Sorts.descending("Hora"));
+        FindIterable<Document> regs = collection.find(query).sort(Sorts.descending("Fecha","Hora"));
         
         try(MongoCursor<Document> cursor = regs.iterator()){
             while (cursor.hasNext()){
@@ -326,12 +326,13 @@ public class Conexion {
         registros = new ArrayList<>();
         int cont = 1;
         
-        Bson filter = Filters.or(
+        Bson filter = Filters.or(Filters.exists("Estado Entrada 1", true),
+                Filters.exists("Estado Salida 1", true),
             Filters.exists("Estado Entrada 2", true),
             Filters.exists("Estado Salida 2", true)
         );
         
-        FindIterable<Document> regs = collection.find(filter).sort(Sorts.descending("Hora"));
+        FindIterable<Document> regs = collection.find(filter).sort(Sorts.descending("Fecha","Hora"));
         
         try(MongoCursor<Document> cursor = regs.iterator()){
             while (cursor.hasNext()){

@@ -13,6 +13,7 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.Timer;
@@ -95,9 +96,17 @@ public class Ctrl extends WindowAdapter implements ActionListener{
         
         this.sala.btnUpdate.addActionListener(this);
         this.sala.btnChange.addActionListener(this);
+        this.sala.btnStop.addActionListener(this);
+        this.sala.btnRestart.addActionListener(this);
+        this.sala.btnPause.addActionListener(this);
+        
         
         this.paint.btnChange.addActionListener(this);
         this.paint.btnUpdate.addActionListener(this);
+        this.paint.btnStop.addActionListener(this);
+        this.paint.btnRestart.addActionListener(this);
+        this.paint.btnPause.addActionListener(this);
+        
         
         this.picos.btnBack.addActionListener(this);
         this.mov.btnBack.addActionListener(this);
@@ -345,6 +354,56 @@ public class Ctrl extends WindowAdapter implements ActionListener{
             
         } 
         
+        
+        /**
+         * Pausamos el buffer e iniciamos a cero
+         */
+        if (e.getSource() == sala.btnStop || 
+                e.getSource() == paint.btnStop){
+            buffer.setPausa(true);
+            buffer.setAforo(0);
+            try{
+                Thread.sleep(50);
+            } catch (InterruptedException ex){
+                ex.printStackTrace();
+            }
+            conn.cerrarConexion();
+            try{
+                Thread.sleep(50);
+            } catch (InterruptedException ex){
+                ex.printStackTrace();
+            }
+            conn.conectar();
+        }
+        
+        /**
+         * Reanudamos la interación
+         */
+        if (e.getSource() == sala.btnRestart ||
+                e.getSource() == paint.btnRestart){
+            conn.conectar();
+            try{
+                Thread.sleep(50);
+            } catch (InterruptedException ex){
+                ex.printStackTrace();
+            }
+            buffer.reanudar();
+        }
+        
+        /**
+         * Pausamos la interacción
+         */
+        if(e.getSource() == sala.btnPause ||
+                e.getSource() == paint.btnPause){
+            buffer.setPausa(true);
+            try{
+                Thread.sleep(50);
+            } catch (InterruptedException ex){
+                ex.printStackTrace();
+            }
+            //conn.cerrarConexion();
+        }
+        
         /**
          * Si el botón pulsado es MODIFICAR
          * de las ventanas sala o paint
@@ -363,9 +422,19 @@ public class Ctrl extends WindowAdapter implements ActionListener{
         if (e.getSource()==sala.btnChange){
             paint.setTitle("RagnaRock");
             paint.setLocationRelativeTo(null);
-            paint.setSize(495, 700);
+            paint.setSize(495, 730);
             paint.setResizable(false);
             paint.setVisible(true);
+            
+            ImageIcon pause = new ImageIcon(System.getProperty("user.dir")+ "/img/pause.png");
+            paint.btnPause.setIcon(pause);
+            
+            ImageIcon stop = new ImageIcon(System.getProperty("user.dir") + "/img/stop.png");
+            paint.btnStop.setIcon(stop);
+            
+            ImageIcon play = new ImageIcon (System.getProperty("user.dir") + "/img/play.png");
+            paint.btnRestart.setIcon(play);
+            
             sala.setVisible(false);
             
             
@@ -565,7 +634,16 @@ public class Ctrl extends WindowAdapter implements ActionListener{
         sala.setLocationRelativeTo(null);
         sala.setResizable(false);
         sala.setVisible(true);
-        sala.setSize(485, 435);
+        sala.setSize(485, 485);
+        
+        ImageIcon pause = new ImageIcon (System.getProperty("user.dir") + "/img/pause.png");
+        sala.btnPause.setIcon(pause);
+        
+        ImageIcon stop = new ImageIcon (System.getProperty("user.dir") + "/img/stop.png");
+        sala.btnStop.setIcon(stop);
+        
+        ImageIcon play = new ImageIcon (System.getProperty("user.dir") + "/img/play.png");
+        sala.btnRestart.setIcon(play);
 
     }
     

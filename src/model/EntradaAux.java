@@ -78,21 +78,21 @@ public class EntradaAux extends Thread implements Movimiento{
             //wait = false;
             buffer.stopEntryAux();
 
-            System.out.println("\n\n"+ buffer.get() + buffer.isEntradaBloqueada()+"\n\n");
+            //System.out.println("\n\n"+ buffer.get() + buffer.isEntradaBloqueada()+"\n\n");
             while (buffer.get() > limiteAforo && buffer.isEntradaBloqueada()){
 
                 //wait = true;
                 mov = false;
                 
-                System.out.println("\n\nENTRADA BLOQUEADA\n\n");
+                //System.out.println("\n\nENTRADA BLOQUEADA\n\n");
                 cont++;
                 buffer.setEntradaBloqueada(false);
-                System.out.println("\nDESBLOQUEAMOS ENTRADA Y SUMAMOS CONTADOR\n\n");
+                //System.out.println("\nDESBLOQUEAMOS ENTRADA Y SUMAMOS CONTADOR\n\n");
                 
             } 
             
              if(buffer.get() > limiteAforo){
-                System.out.println("\n\nAFORO MAYOR QUE 19\n\n");
+                //System.out.println("\n\nAFORO MAYOR QUE 19\n\n");
                 
                 
                 free = false;
@@ -106,7 +106,7 @@ public class EntradaAux extends Thread implements Movimiento{
                     }catch(MongoException e){
                         e.printStackTrace();
                     }
-                    System.out.println("\n\nMAYOR QUE 19 Y CONTBLOCK = 0\n\n");
+                    //System.out.println("\n\nMAYOR QUE 19 Y CONTBLOCK = 0\n\n");
                     try{
                         sleep(dormir);
                     } catch (InterruptedException e){
@@ -114,11 +114,11 @@ public class EntradaAux extends Thread implements Movimiento{
                     }
                 } 
                 contBlock++;
-                 System.out.println("\n\ncontBlock:"+contBlock+"\n\n");
+                 //System.out.println("\n\ncontBlock:"+contBlock+"\n\n");
                 contFree = 0;
                 block = true;
                 try{
-                    System.out.println("\n\nSE DUERME\n\n");
+                    //System.out.println("\n\nSE DUERME\n\n");
                     
                     sleep(getDormir());
                 } catch (InterruptedException e){
@@ -209,7 +209,7 @@ public class EntradaAux extends Thread implements Movimiento{
                     append("Aforo", buffer.get());
 
             documento.append("Movimiento", "Ha entrado un cliente por la Entrada 2");
-            System.out.println("\n\nINSERTADO DOC MOVIMIENTO ENTRADA 2\n\n");
+            //System.out.println("\n\nINSERTADO DOC MOVIMIENTO ENTRADA 2\n\n");
 
             conn.insertarDatos(documento);
         }
@@ -222,7 +222,7 @@ public class EntradaAux extends Thread implements Movimiento{
                     append("Aforo", buffer.get());
 
             documento.append("Estado Entrada 2", buffer.stopEntryAux());
-            System.out.println("\n\nINSERTADO DOC MOVIMIENTO ENTRADA 2\n\n");
+            //System.out.println("\n\nINSERTADO DOC MOVIMIENTO ENTRADA 2\n\n");
 
             conn.insertarDatos(documento);
         }
