@@ -27,28 +27,24 @@ public class Buffer {
     public Buffer() {
     }
 
-    
-    
-    
-    public boolean isPausa(){
-        return pausa;
-    }
-    
-   
 
     /**
      * 
      * @return
      * 
-     * ambos métodos que aparecen a continuación
+     * 
      * notificarán a la entrada y salida auxiliar
      * para que sepan si deben permanecer abiertas 
      * o por el contrario, bloquearse
      */
+    
+    public boolean isPausa(){
+        return pausa;
+    }
     public void setPausa(boolean pausa) {
         this.pausa = pausa;
     }
-
+    
     
     public synchronized void setEntradaBloqueada(boolean entradaBloqueada){
         this.entradaBloqueada = entradaBloqueada;
@@ -63,7 +59,7 @@ public class Buffer {
     public synchronized boolean isSalidaBloqueada(){
         return salidaBloqueada;
     }
-    
+
     public synchronized void setAforo(int aforo){
         this.aforo = aforo;
     }
@@ -120,7 +116,7 @@ public class Buffer {
         //System.out.println("Aforo actual: " + aforo);
     }
     
-   
+    
     public synchronized String stopExitAux(){
         if(aforo <6){
             try{
@@ -138,7 +134,7 @@ public class Buffer {
 
     }
     
-    
+            
     public synchronized String stopEntryAux(){
         if(aforo > 19){
             try{
@@ -188,7 +184,7 @@ public class Buffer {
      * Pausa la frecuencia de entrada y 
      * salida al modificar los parámetros 
      * y de nuevo los reanuda (los métodos
-     * pausar() y reanudar()
+     * pausar() y reanudar())
      */
     public synchronized void pausar(){
         //while(true){

@@ -15,7 +15,7 @@ public class Registro {
 
     public Registro() {
     }
-
+    
     public String getId() {
         return id;
     }

@@ -65,7 +65,7 @@ public class Salida extends Thread implements Movimiento{
 
     @Override
     public void run() {
-        wait = false;
+        wait = false;    
         mov = false;
         cont = 0;
         
@@ -104,22 +104,28 @@ public class Salida extends Thread implements Movimiento{
     }
     
     public String movimiento(){
-        return buffer.getDateNow() + ". Un cliente ha abandonado la sala por la Salida 1.\n" + sala.txtArea.getText();
+        return buffer.getDateNow() + 
+                ". Un cliente ha abandonado la sala por la Puerta 1.\n" + 
+                sala.txtArea.getText();
     }
 
     @Override
     public void realizarMovimiento() {
         if (this.isMov()) {
-            Document documento = new Document("Fecha", buffer.getDateNow().substring(0, 10)).
-                    append("Hora", buffer.getDateNow().substring(12)).
+            Document documento = new Document("Fecha", 
+                    buffer.getDateNow().substring(0, 10)
+            ).
+                    append("Hora", 
+                            buffer.getDateNow().substring(12)
+                    ).
                     append("Aforo", buffer.get());
 
-            documento.append("Movimiento", "Ha abandonado un cliente por la Salida 1");
-            //System.out.println("\n\nINSERTADO DOC MOVIMIENTO SALIDA 1\n\n");
+            documento.append("Movimiento", 
+                    "Un cliente ha abandonado la sala por la Puerta 1");
 
             conn.insertarDatos(documento);
         }
     }
     
 }
-
+    

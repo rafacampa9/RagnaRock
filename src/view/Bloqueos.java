@@ -39,7 +39,7 @@ public class Bloqueos extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("BLOQUEOS DE PUERTAS");
+        jLabel1.setText("ESTADO DE LA PUERTA 2");
         jPanel1.add(jLabel1, java.awt.BorderLayout.PAGE_START);
 
         tbBlock.setModel(new javax.swing.table.DefaultTableModel(

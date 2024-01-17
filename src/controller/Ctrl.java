@@ -63,7 +63,7 @@ public class Ctrl extends WindowAdapter implements ActionListener{
     private final Bloqueos block;
     private final Movimientos mov;
     private final PanelConsultas panel;
-    private ButtonGroup grupo;
+    private final ButtonGroup grupo;
     
     
     
@@ -141,6 +141,7 @@ public class Ctrl extends WindowAdapter implements ActionListener{
      * Al cerrar la ventana sala o paint,
      * cerrará la app y la conexión con la
      * base de datos
+     * @param e
     */
     @Override
     public void windowClosing(WindowEvent e){
@@ -155,7 +156,7 @@ public class Ctrl extends WindowAdapter implements ActionListener{
         if (picos.getFocusableWindowState()){
             
             try{
-                Thread.sleep(5);
+                Thread.sleep(50);
             } catch (InterruptedException ex){
                 ex.printStackTrace();
             }
@@ -164,7 +165,7 @@ public class Ctrl extends WindowAdapter implements ActionListener{
         }else if (mov.getFocusableWindowState()){
             
             try{
-                Thread.sleep(5);
+                Thread.sleep(50);
             }catch (InterruptedException ex){
                 ex.printStackTrace();
             }
@@ -175,7 +176,7 @@ public class Ctrl extends WindowAdapter implements ActionListener{
         else if (block.getFocusableWindowState()){
             
             try{
-                Thread.sleep(5);
+                Thread.sleep(50);
                 
             } catch (InterruptedException ex){
                 ex.printStackTrace();
@@ -183,16 +184,12 @@ public class Ctrl extends WindowAdapter implements ActionListener{
             block.dispose();
         }
         try{
-            Thread.sleep(5);
+            Thread.sleep(100);
         } catch (InterruptedException ex){
             ex.printStackTrace();
         }
             
-        try{
-            Thread.sleep(5);
-        } catch(InterruptedException ex){
-            ex.printStackTrace();
-        }
+        
         
         conn.cerrarConexion();
         
@@ -205,9 +202,7 @@ public class Ctrl extends WindowAdapter implements ActionListener{
      * Método que posteriormente utilizaremos
      * en la clase RagnaRock para iniciar la app
      */
-    public void iniciar(){
-        
-        
+    public void iniciar(){  
         init.setTitle("Inicio");
         init.setLocationRelativeTo(null);
         init.setResizable(false);
@@ -219,7 +214,8 @@ public class Ctrl extends WindowAdapter implements ActionListener{
      * 
      * @param dormir_entrada1
      * @param dormir_entrada2
-     * @param dormir_salida
+     * @param dormir_salida1
+     * @param dormir_salida2
      * @param cont
      * @param wait 
      * 
@@ -228,7 +224,9 @@ public class Ctrl extends WindowAdapter implements ActionListener{
      * del aforo
      */
     
-    public void controlAforo(int dormir_entrada1, int dormir_entrada2, int dormir_salida1, int dormir_salida2, int cont, boolean wait){
+    public void controlAforo(int dormir_entrada1, int dormir_entrada2,
+            int dormir_salida1, int dormir_salida2, int cont, 
+            boolean wait){
         /**
          * Si se abre la ventana init
          * por primera vez
@@ -251,9 +249,7 @@ public class Ctrl extends WindowAdapter implements ActionListener{
             dateNow.start();
             //reg.start();
             cont = 1;
-            
-            
-         
+        
         /**
          * En este caso, ya se ha abierto
          * previamente, por lo que no debemos
@@ -266,15 +262,61 @@ public class Ctrl extends WindowAdapter implements ActionListener{
             entrada1.setWait(wait);
             entrada2.setWait(wait);
             salida1.setWait(wait);
-            salida2.setWait(wait);
-                
+            salida2.setWait(wait);           
             entrada1.setDormir(dormir_entrada1);
             entrada2.setDormir(dormir_entrada2);
             salida1.setDormir(dormir_salida1);
-            salida2.setDormir(dormir_salida2);
-  
+            salida2.setDormir(dormir_salida2);  
         }    
     }
+    
+    /**
+     * Arrancar el timer asociado a
+     * la ventana paint.
+     * Se utiliza para repintar la ventana
+     * paint cada segundo, actualizándose 
+     * la vista del aforo.
+     */
+    public void startTimer() {
+        if (timer != null && !timer.isRunning())
+            timer.start();
+    }
+   
+    /**
+     * Pausar el timer asociado
+     * a la ventana paint
+     */
+    public void stopTimer() {
+        if (timer != null && timer.isRunning())
+            timer.stop();
+    }
+       
+    /**
+     *  Hacer visible la ventana sala
+     */
+    public void initSalaPrincipal(){
+        sala.setTitle("RagnaRock");
+        sala.setLocationRelativeTo(null);
+        sala.setResizable(false);
+        sala.setVisible(true);
+        sala.setSize(485, 485);
+        
+        ImageIcon pause = new ImageIcon (System.getProperty("user.dir") + "/img/pause.png");
+        sala.btnPause.setIcon(pause);
+        sala.btnPause.setBackground (Color.white);
+        sala.btnPause.setBorder(new BevelBorder(BevelBorder.RAISED));
+        
+        ImageIcon stop = new ImageIcon (System.getProperty("user.dir") + "/img/stop.png");
+        sala.btnStop.setIcon(stop);
+        sala.btnStop.setBackground (Color.white);
+        sala.btnStop.setBorder(new BevelBorder(BevelBorder.RAISED));
+        
+        ImageIcon play = new ImageIcon (System.getProperty("user.dir") + "/img/play.png");
+        sala.btnRestart.setIcon(play);
+        sala.btnRestart.setBackground (Color.white);
+        sala.btnRestart.setBorder(new BevelBorder(BevelBorder.RAISED));
+
+    }  
 
     
     /**
@@ -291,16 +333,14 @@ public class Ctrl extends WindowAdapter implements ActionListener{
     public void actionPerformed(ActionEvent e) {    
         
         int dormirEntrada1, dormirEntrada2, dormirSalida, dormirSalida2;
-        JTable tableMov = mov.tbMov, tableBlock = block.tbBlock, tableMax = picos.tableMax, tableMin = picos.tableMin;
+        JTable tableMov = mov.tbMov, tableBlock = block.tbBlock, 
+                tableMax = picos.tableMax, 
+                tableMin = picos.tableMin;
         DefaultTableModel tableModelBlock = (DefaultTableModel) tableBlock.getModel();
         DefaultTableModel tableModelMov = (DefaultTableModel) tableMov.getModel();
         DefaultTableModel tableModelMax = (DefaultTableModel) tableMax.getModel();
         DefaultTableModel tableModelMin = (DefaultTableModel) tableMin.getModel();
-        
-        
-        
-        
-        
+   
         /**
          * Si el botón pulsado es ENVIAR de 
          * la ventana init
@@ -313,14 +353,11 @@ public class Ctrl extends WindowAdapter implements ActionListener{
                     && !init.txtEntrada2.getText().isEmpty() && init.txtEntrada2.getText()!= null 
                     && !init.txtSalida.getText().isEmpty() && init.txtSalida.getText()!= null
                     && !init.txtSalida2.getText().isEmpty() && init.txtSalida2.getText()!=null){
-                
                 try {
                     dormirEntrada1 = (int) Math.round(Double.parseDouble(init.txtEntrada1.getText()));
                     dormirEntrada2 = (int) Math.round(Double.parseDouble(init.txtEntrada2.getText()));
                     dormirSalida = (int) Math.round(Double.parseDouble(init.txtSalida.getText()));
                     dormirSalida2 = (int) Math.round(Double.parseDouble(init.txtSalida2.getText()));
-                    
-                    
                 } catch (NumberFormatException ex) {
                     // Si los valores introducidos no son numéricos
                     Random rand = new Random();
@@ -328,8 +365,7 @@ public class Ctrl extends WindowAdapter implements ActionListener{
                     dormirEntrada2 = rand.nextInt(9001) + 1000;
                     dormirSalida = rand.nextInt(9001) + 1000;
                     dormirSalida2 = rand.nextInt(9001) + 1000;
-                }   
-                
+                }      
             } else {
                 Random rand = new Random();               
                 dormirEntrada1 = rand.nextInt(9001) + 1000;
@@ -337,7 +373,6 @@ public class Ctrl extends WindowAdapter implements ActionListener{
                 dormirSalida = rand.nextInt(9001) + 1000; 
                 dormirSalida2 = rand.nextInt(9001) + 1000;
             }
-            
             controlAforo(
                 dormirEntrada1,
                 dormirEntrada2,
@@ -346,17 +381,13 @@ public class Ctrl extends WindowAdapter implements ActionListener{
                 cont,
                 false
             );
-
-            
             if (cont == 0){               
                 initSalaPrincipal();
                 init.setVisible(false);
                 cont++;
-            } 
-            
+            }             
         } 
-        
-        
+       
         /**
          * Pausamos el buffer e iniciamos a cero
          */
@@ -376,8 +407,7 @@ public class Ctrl extends WindowAdapter implements ActionListener{
                 ex.printStackTrace();
             }
             conn.conectar();
-        }
-        
+        }       
         /**
          * Reanudamos la interación
          */
@@ -398,12 +428,7 @@ public class Ctrl extends WindowAdapter implements ActionListener{
         if(e.getSource() == sala.btnPause ||
                 e.getSource() == paint.btnPause){
             buffer.setPausa(true);
-            try{
-                Thread.sleep(50);
-            } catch (InterruptedException ex){
-                ex.printStackTrace();
-            }
-            //conn.cerrarConexion();
+
         }
         
         /**
@@ -466,12 +491,18 @@ public class Ctrl extends WindowAdapter implements ActionListener{
          * CONSULTAS AFORO de las ventanas
          * sala o paint
          */
-        if (e.getSource() == sala.btnQuery || e.getSource()==paint.btnQuery){
+        if (e.getSource() == sala.btnQuery || 
+                e.getSource()==paint.btnQuery){
             panel.setLocation(700,300);
             panel.setVisible(true);
             panel.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         }
         
+        /**
+         * Si pulsamos el RadioButton que
+         * abre dentro de las posibles consultas
+         * la ventana de los PICOS DE AFORO
+         */
         if (e.getSource()==panel.rbMinMax){
             tableModelMax.setRowCount(0);
             tableModelMin.setRowCount(0);
@@ -518,7 +549,11 @@ public class Ctrl extends WindowAdapter implements ActionListener{
           
         }
         
-        
+        /**
+         * Si pulsamos el RadioButton que
+         * abre dentro de las posibles consultas
+         * la ventana de los MOVIMIENTOS
+         */
         if (e.getSource()==panel.rbMov){
             tableModelMov.setRowCount(0);
             TableColumn columnMov;
@@ -555,8 +590,12 @@ public class Ctrl extends WindowAdapter implements ActionListener{
             mov.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
             panel.setVisible(false);
         }
-        
-        
+       
+        /**
+         * Si pulsamos el RadioButton que
+         * abre dentro de las posibles consultas
+         * la ventana de los BLOQUEOS DE PUERTAS
+         */
         if (e.getSource() == panel.rbBlock){
             tableModelBlock.setRowCount(0);
             TableColumn columnBlock;
@@ -594,73 +633,22 @@ public class Ctrl extends WindowAdapter implements ActionListener{
             panel.setVisible(false);
         }
         
+        /**
+         *Si pulsamos el botón ATRAS de cualquiera de 
+         * las pantallas de consultas
+         */
         if (e.getSource()== block.btnBack){
             block.setVisible(false);
             panel.setVisible(true);
-        }
-        
+        }      
         if (e.getSource() == mov.btnBack){
             mov.setVisible(false);
             panel.setVisible(true);
-        }
-        
+        }        
         if (e.getSource() == picos.btnBack){
             picos.setVisible(false);
             panel.setVisible(true);
-        }
-        
-    }
-    
-    /**
-     * Arrancar el timer asociado a
-     * la ventana paint.
-     * Se utiliza para repintar la ventana
-     * paint cada segundo, actualizándose 
-     * la vista del aforo.
-     */
-    public void startTimer() {
-        if (timer != null && !timer.isRunning())
-            timer.start();
-    }
-
-    
-    /**
-     * Pausar el timer asociado
-     * a la ventana paint
-     */
-    public void stopTimer() {
-        if (timer != null && timer.isRunning())
-            timer.stop();
-    }
-    
-    
-    /**
-     *  Hacer visible la ventana sala
-     */
-    public void initSalaPrincipal(){
-        sala.setTitle("RagnaRock");
-        sala.setLocationRelativeTo(null);
-        sala.setResizable(false);
-        sala.setVisible(true);
-        sala.setSize(485, 485);
-        
-        ImageIcon pause = new ImageIcon (System.getProperty("user.dir") + "/img/pause.png");
-        sala.btnPause.setIcon(pause);
-        sala.btnPause.setBackground (Color.white);
-        sala.btnPause.setBorder(new BevelBorder(BevelBorder.RAISED));
-        
-        ImageIcon stop = new ImageIcon (System.getProperty("user.dir") + "/img/stop.png");
-        sala.btnStop.setIcon(stop);
-        sala.btnStop.setBackground (Color.white);
-        sala.btnStop.setBorder(new BevelBorder(BevelBorder.RAISED));
-        
-        ImageIcon play = new ImageIcon (System.getProperty("user.dir") + "/img/play.png");
-        sala.btnRestart.setIcon(play);
-        sala.btnRestart.setBackground (Color.white);
-        sala.btnRestart.setBorder(new BevelBorder(BevelBorder.RAISED));
-
-    }
-    
-   
+        }   
+    } 
 }
 

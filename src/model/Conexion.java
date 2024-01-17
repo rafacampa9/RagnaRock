@@ -22,10 +22,10 @@ import org.bson.conversions.Bson;
  */
 public class Conexion {
     
-    private static final String HOST = "localhost";
-    private static final int PORT = 27017;
-    private static final String DB = "RAGNAROCK";
-    private static final String COLLECTION = "AFORO";
+    private  final String HOST = "localhost";
+    private  final int PORT = 27017;
+    private  final String DB = "RAGNAROCK";
+    private  final String COLLECTION = "AFORO";
     
     private MongoCollection<Document> collection;
     private MongoClient mongoClient;
@@ -39,6 +39,8 @@ public class Conexion {
         conectar();
         //crearDB();
         crearColeccion();
+        
+        
         //borrarColeccion();
     }
     
@@ -156,7 +158,7 @@ public class Conexion {
                     System.out.println("Esta colección no existe");
                 }
             } else {
-                System.out.println("Esta colebase de datos no existe: " + collection);
+                System.out.println("Esta base de datos no existe: " + DB);
             }
         } catch (MongoException e){
             e.printStackTrace();
@@ -218,14 +220,14 @@ public class Conexion {
      * 
      * Este método nos devolverá
      * una lista con todos los
-     * registros realizados cuando
+     * documentos realizados cuando
      * el pico de aforo ha llegado
      * al máximo (25)
      */
     public ArrayList<Registro> picosMax(){
         collection = database.getCollection(COLLECTION);
         registros = new ArrayList<>();
-        int cont = 1;
+        //int cont = 1;
         Document query = new Document("Aforo", 25);
         
         FindIterable<Document> result = collection.find(query).sort(Sorts.descending("Fecha", "Hora"));
@@ -245,7 +247,7 @@ public class Conexion {
                 
                 
                 registros.add(registro);
-                cont++;
+                //cont++;
             }
         }
         return registros;
@@ -257,7 +259,7 @@ public class Conexion {
      * @return
      * 
      * Este método nos devolverá una 
-     * lista con todos los registros que
+     * lista con todos los documentos que
      * se han realizado cuando el aforo
      * era igual a 0
      */
@@ -268,9 +270,10 @@ public class Conexion {
         
         Document query = new Document("Aforo", 0);
         
-        FindIterable<Document> regs = collection.find(query).sort(Sorts.descending("Fecha","Hora"));
+        FindIterable<Document> docs = collection.find(query).
+                sort(Sorts.descending("Fecha","Hora"));
         
-        try (MongoCursor<Document> cursor = regs.iterator()){
+        try (MongoCursor<Document> cursor = docs.iterator()){
             while(cursor.hasNext()){
                 Document document = cursor.next();
                 Registro registro = new Registro();
@@ -301,9 +304,11 @@ public class Conexion {
         
         Document query = new Document ("Movimiento", new Document("$exists", true));
         
-        FindIterable<Document> regs = collection.find(query).sort(Sorts.descending("Fecha","Hora"));
+        FindIterable<Document> docs = collection.find(query)
+                                    .sort(Sorts.descending("Fecha",
+                                                                "Hora"));
         
-        try(MongoCursor<Document> cursor = regs.iterator()){
+        try(MongoCursor<Document> cursor = docs.iterator()){
             while (cursor.hasNext()){
                 Document document = cursor.next();
                 Registro registro = new Registro();
@@ -326,15 +331,13 @@ public class Conexion {
         registros = new ArrayList<>();
         int cont = 1;
         
-        Bson filter = Filters.or(Filters.exists("Estado Entrada 1", true),
-                Filters.exists("Estado Salida 1", true),
-            Filters.exists("Estado Entrada 2", true),
+        Bson filter = Filters.or(Filters.exists("Estado Entrada 2", true),
             Filters.exists("Estado Salida 2", true)
         );
         
-        FindIterable<Document> regs = collection.find(filter).sort(Sorts.descending("Fecha","Hora"));
+        FindIterable<Document> docs = collection.find(filter).sort(Sorts.descending("Fecha","Hora"));
         
-        try(MongoCursor<Document> cursor = regs.iterator()){
+        try(MongoCursor<Document> cursor = docs.iterator()){
             while (cursor.hasNext()){
                 Document document = cursor.next();
                 Registro registro = new Registro();
@@ -348,7 +351,7 @@ public class Conexion {
                     registro.setEstado(document.getString("Estado Entrada 2"));
                 } else if (document.containsKey("Estado Salida 2")) {
                     registro.setEstado(document.getString("Estado Salida 2"));
-                }
+                } 
                 
                 registros.add(registro);
                 cont++;
@@ -365,7 +368,7 @@ public class Conexion {
      * 
      * Este método se deberá utilizar en la clase Registrar
      * y solo será necesario si queremos eliminar los registros
-     * de la colección de PICOS DE AFORO
+     * de la colección de AFORO
      */
     public void eliminarPicos(String nombre, boolean valor){
         collection = database.getCollection(COLLECTION);

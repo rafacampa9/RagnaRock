@@ -18,7 +18,6 @@ public class SalidaAux extends Thread implements Movimiento{
     
     private int dormir;
     private Buffer buffer;
-    //private Document documento;
     private Sala sala;
     private boolean wait, block, free, changedBlock, mov;
     private int cont, contBlock, contFree;
@@ -95,7 +94,7 @@ public class SalidaAux extends Thread implements Movimiento{
             } 
             
              if(buffer.get() < limiteAforo){
-
+                contFree = 0;
                 free = false;
                 setChangedBlock(false);
                 if (!block && contBlock == 0){
@@ -111,7 +110,7 @@ public class SalidaAux extends Thread implements Movimiento{
                     }
                 } 
                 contBlock++;
-                contFree = 0;
+                
                 wait = true;
                 block = true;
                 try{
@@ -130,7 +129,7 @@ public class SalidaAux extends Thread implements Movimiento{
 
                 block = false;
                 setChangedBlock(false);
-                    
+                contBlock = 0;  
                 if (!free && contFree == 0){
                         /*
                         AQUÍ SE REALIZA LA INSERCIÓN
@@ -143,7 +142,7 @@ public class SalidaAux extends Thread implements Movimiento{
                     
                 } 
                 free = true;
-                contBlock = 0;
+                
                 contFree++;
                 wait = false;    
                     
@@ -170,7 +169,7 @@ public class SalidaAux extends Thread implements Movimiento{
     }
     
     public String movimiento(){
-        return buffer.getDateNow() + ". Un cliente ha abandonado la sala por la Salida 2.\n" + sala.txtArea.getText();
+        return buffer.getDateNow() + ". Un cliente ha abandonado la sala por la Puerta 2.\n" + sala.txtArea.getText();
     }
     
     public String bloqueo(String stopExitResult){
@@ -192,7 +191,7 @@ public class SalidaAux extends Thread implements Movimiento{
                     append("Hora", buffer.getDateNow().substring(12)).
                     append("Aforo", buffer.get());
 
-            documento.append("Movimiento", "Ha abandonado un cliente por la Salida 2");
+            documento.append("Movimiento", "Un cliente ha abandonado la sala por la Puerta 2");
             //System.out.println("\n\nINSERTADO DOC MOVIMIENTO SALIDA 2\n\n");
 
             conn.insertarDatos(documento);

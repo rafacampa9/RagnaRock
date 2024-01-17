@@ -183,7 +183,7 @@ public class EntradaAux extends Thread implements Movimiento{
     }
     
     public String movimiento(){
-        return buffer.getDateNow() + ". Ha entrado un cliente por la Entrada 2.\n" + sala.txtArea.getText();
+        return buffer.getDateNow() + ". Ha entrado un cliente por la Puerta 2.\n" + sala.txtArea.getText();
     }
     
     public String bloqueo(String stopEntryResult){
@@ -205,7 +205,7 @@ public class EntradaAux extends Thread implements Movimiento{
                     append("Hora", buffer.getDateNow().substring(12)).
                     append("Aforo", buffer.get());
 
-            documento.append("Movimiento", "Ha entrado un cliente por la Entrada 2");
+            documento.append("Movimiento", "Ha entrado un cliente por la Puerta 2");
             //System.out.println("\n\nINSERTADO DOC MOVIMIENTO ENTRADA 2\n\n");
 
             conn.insertarDatos(documento);

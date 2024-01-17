@@ -21,6 +21,7 @@ public class Entrada extends Thread implements Movimiento{
     private boolean wait, mov;
     private Conexion conn;     
     private int cont;
+    
             
 
 
@@ -70,7 +71,7 @@ public class Entrada extends Thread implements Movimiento{
         cont = 0;
         
         while (true){
-            
+
             if (wait){
                buffer.pausar(); 
                cont = 1;
@@ -98,12 +99,12 @@ public class Entrada extends Thread implements Movimiento{
                 paint.txtArea.setText(movimiento());
             }
             
-        }
-
     }
     
+            } 
+            
     public String movimiento(){
-        return buffer.getDateNow() + ". Ha entrado un cliente por la Entrada 1.\n" + sala.txtArea.getText();
+        return buffer.getDateNow() + ". Ha entrado un cliente por la Puerta 1.\n" + sala.txtArea.getText();
     }
     
     @Override
@@ -113,13 +114,13 @@ public class Entrada extends Thread implements Movimiento{
                     append("Hora", buffer.getDateNow().substring(12)).
                     append("Aforo", buffer.get());
 
-            documento.append("Movimiento", "Ha entrado un cliente por la Entrada 1");
+            documento.append("Movimiento", "Ha entrado un cliente por la Puerta 1");
             //System.out.println("\n\nINSERTADO DOC MOVIMIENTO ENTRADA 1\n\n");
 
             conn.insertarDatos(documento);
         }
     }
-
-   
-}
-
+    
+            
+        }
+    
